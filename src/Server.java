@@ -6,21 +6,20 @@ public class Server {
         serverSocket.setReuseAddress(true);
         while (true) {
             Socket socket = serverSocket.accept();
-            ClietHandler clientSock = new ClietHandler(socket);
+            ClientHandler clientSock = new ClientHandler(socket);
             new Thread(clientSock).start();
         }
     }
-    private static class ClietHandler implements Runnable {
+    private static class ClientHandler implements Runnable {
         private final Socket serverSocket;
 
-        private ClietHandler(Socket serverSocket) {
+        private ClientHandler(Socket serverSocket) {
             this.serverSocket = serverSocket;
         }
 
         @Override
         public void run() {
             try {
-
                 System.out.println("Client connected");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
                 PrintWriter writer = new PrintWriter(serverSocket.getOutputStream());
@@ -35,6 +34,7 @@ public class Server {
 
                 writer.close();
                 reader.close();
+                serverSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
