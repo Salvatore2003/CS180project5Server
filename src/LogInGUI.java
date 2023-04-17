@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,24 +17,35 @@ public class LogInGUI extends JComponent implements Runnable {
     JButton registerButton;
     JPanel panel;
     JFrame frame;
-    Socket serverSocket;
+    Socket socket;
+    public LogInGUI (Socket socket) {
+        this.socket = socket;
+    }
+
+
 
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == signInButton) {
-                System.out.println("sign in button");
-                System.out.println("username: " + usernameText.getText() + "password: " + passwordText.getText());
+                String userSignInAttempt = usernameText.getText() + " " + passwordText.getText();
+                try {
+                    PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                    BufferedReader bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Error connecting to server", "Tutor Service",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
             if (e.getSource() == registerButton) {
                 frame.dispose();
-                RegisterGUI.runRegisterGUI();
+                RegisterGUI.runRegisterGUI(socket);
             }
         }
     };
 
-    public static void runLogInGUI() {
-            SwingUtilities.invokeLater(new LogInGUI());
+    public static void runLogInGUI(Socket socket) {
+            SwingUtilities.invokeLater(new LogInGUI(socket));
     }
 
     public void run() {

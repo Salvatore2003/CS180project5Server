@@ -12,7 +12,8 @@ public class runClient {
             Socket socket = new Socket("localhost", 4242);
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            LogInGUI.runLogInGUI();
+            LogInGUI logInGUI = new LogInGUI(socket);
+            logInGUI.runLogInGUI(socket);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Failed to connect", "Server connection",
                     JOptionPane.ERROR_MESSAGE);

@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -22,8 +24,7 @@ public class RegisterGUI extends JComponent implements Runnable {
     JButton exitButton;
     JRadioButton buyerButton;
     JRadioButton sellerButton;
-    public
-
+    Socket socket;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -70,13 +71,37 @@ public class RegisterGUI extends JComponent implements Runnable {
                 }
                 System.out.println(validUser);
                 if (validUser) {
-                    JOptionPane.showMessageDialog(null, "Account Successfully Created",
-                            "Account Creation", JOptionPane.INFORMATION_MESSAGE);
-                    newUser = userName + " " + password + " " + userEmail + " " + buyerButton.isSelected() +
-                            " " + sellerButton.isSelected();
-                    //PrintWriter printWriter = new PrintWriter(new InputStreamReader());
-                    System.out.println(newUser);
-                    LogInGUI.runLogInGUI();
+                    try {
+                        String line;
+                        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                        BufferedReader bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        writer.write("New User");
+                        writer.println();
+                        writer.flush();
+                        newUser = userName + " " + password + " " + userEmail + " " + buyerButton.isSelected() +
+                                " " + sellerButton.isSelected();
+                        System.out.println("wrote");
+                        writer.write(newUser);
+                        writer.println();
+                        writer.flush();
+                        line = bfr.readLine();
+                        System.out.println(line);
+                        if (line.equals("account created")) {
+                            JOptionPane.showMessageDialog(null, "Account Successfully Created",
+                                    "Account Creation", JOptionPane.INFORMATION_MESSAGE);
+                            frame.dispose();
+                            LogInGUI.runLogInGUI(socket);
+                        } else if (line.equals("username exist error")) {
+                            JOptionPane.showMessageDialog(null, "Username already exist",
+                                    "Account Creation Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error occurred ",
+                                            "while creating account.", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                 } else {
                     JOptionPane.showMessageDialog(null, errors,
                             "Account Creation Error", JOptionPane.ERROR_MESSAGE);
@@ -85,13 +110,18 @@ public class RegisterGUI extends JComponent implements Runnable {
             }
             if (e.getSource() == exitButton) {
                 frame.dispose();
-                LogInGUI.runLogInGUI();
+                LogInGUI.runLogInGUI(socket);
+
             }
         }
     };
 
-    public static void runRegisterGUI() {
-        SwingUtilities.invokeLater(new RegisterGUI());
+    public RegisterGUI(Socket socket) {
+        this.socket = socket;
+    }
+
+    public static void runRegisterGUI(Socket socket) {
+        SwingUtilities.invokeLater(new RegisterGUI(socket));
     }
 
     @Override
