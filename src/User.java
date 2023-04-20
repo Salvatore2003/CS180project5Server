@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -11,7 +12,7 @@ import java.util.*;
  * @version 4/10/2023
  *
  */
-public class User {
+public class User implements Serializable {
     private String userName;
     private String password;
     private String userEmail;

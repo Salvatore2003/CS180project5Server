@@ -41,6 +41,7 @@ public class Server {
                 System.out.println("Client connected");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
                 PrintWriter writer = new PrintWriter(serverSocket.getOutputStream());
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
                 do {
                     action = reader.readLine();
                     if (action.equals("New User")) {
@@ -71,6 +72,11 @@ public class Server {
                                 writer.println();
                                 writer.flush();
                             }
+                        }
+                    }
+                    if (action.equals("Logging in")) {
+                        synchronized (obj) {
+                            logInAttempt(reader, writer, objectOutputStream);
                         }
                     }
                 } while (runThread);
@@ -124,5 +130,45 @@ public class Server {
             }
         }
         return true;
+    }
+    public static void logInAttempt(BufferedReader bfr, PrintWriter writer, ObjectOutputStream objectOutputStream) {
+        String userNameAttempt;
+        String passwordAttempt;
+        int indexOfUser = 0;
+        boolean userNameExist = false;
+        boolean logInSuccess = false;
+        try {
+            userNameAttempt = bfr.readLine();
+            passwordAttempt = bfr.readLine();
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getUserName().equals(userNameAttempt)) {
+                    indexOfUser = i;
+                    userNameExist = true;
+                    break;
+                }
+            }
+            if (userNameExist) {
+                if(users.get(indexOfUser).getPassword().equals(passwordAttempt)) {
+                    logInSuccess = true;
+                }
+            }
+            if (logInSuccess) {
+
+                writer.write("log in success");
+                writer.println();
+                writer.flush();
+                objectOutputStream.writeObject(users.get(indexOfUser));
+
+
+            } else {
+                writer.write("log in fail");
+                writer.println();
+                writer.flush();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 }
