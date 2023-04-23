@@ -37,13 +37,15 @@ public class Server {
         public void run() {
             try {
                 boolean runThread = true;
+
                 String action;
-                System.out.println("Client connected");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
                 PrintWriter writer = new PrintWriter(serverSocket.getOutputStream());
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
                 do {
                     action = reader.readLine();
+                    System.out.println(action);
+
                     if (action.equals("New User")) {
                         synchronized (obj) {
                             try {
@@ -51,6 +53,7 @@ public class Server {
 
                                 if (newUser != null) {
                                     users.add(newUser);
+                                    System.out.println("account good");
                                     writer.write("account created");
                                     writer.println();
                                     writer.flush();
@@ -137,6 +140,7 @@ public class Server {
         int indexOfUser = 0;
         boolean userNameExist = false;
         boolean logInSuccess = false;
+
         try {
             userNameAttempt = bfr.readLine();
             passwordAttempt = bfr.readLine();
@@ -158,8 +162,6 @@ public class Server {
                 writer.println();
                 writer.flush();
                 objectOutputStream.writeObject(users.get(indexOfUser));
-
-
             } else {
                 writer.write("log in fail");
                 writer.println();
@@ -170,5 +172,7 @@ public class Server {
             e.printStackTrace();
 
         }
+        System.out.println("end of log in");
+
     }
 }

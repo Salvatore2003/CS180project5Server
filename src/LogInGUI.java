@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class LogInGUI extends JComponent implements Runnable {
@@ -16,6 +15,9 @@ public class LogInGUI extends JComponent implements Runnable {
     JFrame frame;
     Socket socket;
     User logInUser;
+    PrintWriter writer;
+    BufferedReader bfr;
+    ObjectInputStream objectInputStream;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -23,9 +25,7 @@ public class LogInGUI extends JComponent implements Runnable {
                 String userUsernameAttempt = usernameText.getText();
                 String userPasswordAttempt = passwordText.getText();
                 try {
-                    PrintWriter writer = new PrintWriter(socket.getOutputStream());
-                    BufferedReader bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                    System.out.println("execute sending log in");
                     writer.write("Logging in");
                     writer.println();
                     writer.flush();
@@ -35,13 +35,14 @@ public class LogInGUI extends JComponent implements Runnable {
                     writer.write(userPasswordAttempt);
                     writer.println();
                     writer.flush();
-                    if (bfr.readLine().equals("log in success")) {
+                    if (bfr.readLine().contains("log in success")) {
                         JOptionPane.showMessageDialog(null, "Successful log in", "Tutor Service",
                                 JOptionPane.INFORMATION_MESSAGE);
                         logInUser = (User) objectInputStream.readObject();
                         System.out.println(logInUser.getUserName());
 
                     } else {
+                        System.out.println("no log in");
                         JOptionPane.showMessageDialog(null, "Invalid Username or password", "Tutor Service",
                                 JOptionPane.ERROR_MESSAGE);
                     }
@@ -71,6 +72,13 @@ public class LogInGUI extends JComponent implements Runnable {
     }
 
     public void run() {
+        try {
+            writer = new PrintWriter(socket.getOutputStream());
+            bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            objectInputStream = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         panel = new JPanel();
         panel.setLayout(null);
         frame = new JFrame();
@@ -100,6 +108,5 @@ public class LogInGUI extends JComponent implements Runnable {
         panel.add(registerButton);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
-
     }
 }

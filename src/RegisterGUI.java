@@ -69,7 +69,7 @@ public class RegisterGUI extends JComponent implements Runnable {
                     errors += "Select buyer or seller.\n";
                     validUser = false;
                 }
-                System.out.println(validUser);
+
                 if (validUser) {
                     try {
                         String line;
@@ -80,18 +80,17 @@ public class RegisterGUI extends JComponent implements Runnable {
                         writer.flush();
                         newUser = userName + " " + password + " " + userEmail + " " + buyerButton.isSelected() +
                                 " " + sellerButton.isSelected();
-                        System.out.println("wrote");
                         writer.write(newUser);
                         writer.println();
                         writer.flush();
                         line = bfr.readLine();
                         System.out.println(line);
-                        if (line.equals("account created")) {
+                        if (line.contains("account created")) {
                             JOptionPane.showMessageDialog(null, "Account Successfully Created",
                                     "Account Creation", JOptionPane.INFORMATION_MESSAGE);
                             frame.dispose();
                             LogInGUI.runLogInGUI(socket);
-                        } else if (line.equals("username exist error")) {
+                        } else if (line.contains("username exist error")) {
                             JOptionPane.showMessageDialog(null, "Username already exist",
                                     "Account Creation Error", JOptionPane.ERROR_MESSAGE);
                         } else {
