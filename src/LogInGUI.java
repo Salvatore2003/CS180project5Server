@@ -25,7 +25,6 @@ public class LogInGUI extends JComponent implements Runnable {
                 String userUsernameAttempt = usernameText.getText();
                 String userPasswordAttempt = passwordText.getText();
                 try {
-                    System.out.println("execute sending log in");
                     writer.write("Logging in");
                     writer.println();
                     writer.flush();
@@ -39,7 +38,8 @@ public class LogInGUI extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Successful log in", "Tutor Service",
                                 JOptionPane.INFORMATION_MESSAGE);
                         logInUser = (User) objectInputStream.readObject();
-                        System.out.println(logInUser.getUserName());
+                        frame.dispose();
+                        UserInterface.runUserInterface(logInUser);
 
                     } else {
                         System.out.println("no log in");

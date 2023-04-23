@@ -28,8 +28,7 @@ public class UserInterface extends JComponent implements Runnable{
         this.user = user;
     }
 
-    public static void main(String[] args) {
-        User user = new User("Bryce", "password", "b@", true, false);
+    public static void runUserInterface(User user) {
         SwingUtilities.invokeLater(new UserInterface(user));
     }
     public void run() {
@@ -55,6 +54,8 @@ public class UserInterface extends JComponent implements Runnable{
         messages.setBounds(10, 80, 240, 30);
         messages.addActionListener(actionListener);
         panel.add(messages);
+
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         frame.setVisible(true);
     }

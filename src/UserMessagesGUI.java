@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,10 +23,10 @@ public class UserMessagesGUI {
     public static void main(String[] args) {
         // Create some users for testing
         ArrayList<User> users = new ArrayList<>();
-        User user1 = new User("user1");
-        User user2 = new User("user2");
-        users.add(user1);
-        users.add(user2);
+        //User user1 = new User("user1");
+        //User user2 = new User("user2");
+        //users.add(user1);
+        //users.add(user2);
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -109,4 +109,4 @@ public class UserMessagesGUI {
         });
         bottomPanel.add(viewOutboxButton);
     }
-}
+}*/

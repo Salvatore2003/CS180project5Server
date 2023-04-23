@@ -16,8 +16,8 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private String userEmail;
-    //private ArrayList<Message> inbox;
-    //private ArrayList<Message> outbox;
+    private ArrayList<Message> inbox;
+    private ArrayList<Message> outbox;
     boolean buyer;
     boolean seller;
 
@@ -118,13 +118,13 @@ public class User implements Serializable {
     }
     //Nick did the parts below this line
 
-    //public ArrayList<Message> getInbox() { return inbox; }
+    public ArrayList<Message> getInbox() { return inbox; }
 
-    //public void setInbox(ArrayList<Message> inbox) { this.inbox = inbox; }
+    public void setInbox(ArrayList<Message> inbox) { this.inbox = inbox; }
 
-    //public ArrayList<Message> getOutbox() { return outbox; }
+    public ArrayList<Message> getOutbox() { return outbox; }
 
-    //public void setOutbox(ArrayList<Message> outbox) { this.outbox = outbox; }
+    public void setOutbox(ArrayList<Message> outbox) { this.outbox = outbox; }
 
     @Override
     public String toString() {
