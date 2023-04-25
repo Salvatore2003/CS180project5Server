@@ -46,7 +46,7 @@ public class SellerGUI extends JComponent implements Runnable {
         this.user = user;
     }
 
-    public static void main(String[] args) {
+    public static void runSellerGUI(String[] args) {
 
         SwingUtilities.invokeLater(new SellerGUI(user));
     }

@@ -39,7 +39,7 @@ public class LogInGUI extends JComponent implements Runnable {
                                 JOptionPane.INFORMATION_MESSAGE);
                         logInUser = (User) objectInputStream.readObject();
                         frame.dispose();
-                        UserInterface.runUserInterface(logInUser);
+                        UserInterface.runUserInterface(logInUser, socket);
 
                     } else {
                         System.out.println("no log in");

@@ -10,7 +10,7 @@ import java.util.Vector;
 
 public class CustomerGUI {
 
-    public static void main(String[] args) {
+    public static void runCustomerGUI() {
         try {
             String storeName = JOptionPane.showInputDialog(null, "What is the name of Store?", "Info Form",
                     JOptionPane.QUESTION_MESSAGE);

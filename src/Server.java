@@ -43,8 +43,8 @@ public class Server {
                 PrintWriter writer = new PrintWriter(serverSocket.getOutputStream());
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
                 do {
+
                     action = reader.readLine();
-                    System.out.println(action);
 
                     if (action.equals("New User")) {
                         synchronized (obj) {

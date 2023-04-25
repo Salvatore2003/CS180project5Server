@@ -1,0 +1,5 @@
+blamarca tomars bl@ true false
+blamarca2 tomars ep@ false true
+blamarca3 tomars e@ true false
+blamarca4 tomars b@ true false
+blamarca5 tomars a@ true false
