@@ -17,7 +17,12 @@ public class UserInterface extends JComponent implements Runnable{
                 System.out.println("settings");
             }
             if (e.getSource() == stores) {
-                //implement
+                if (user.isBuyer()) {
+
+                }
+                if (user.isSeller()) {
+                    //implement
+                }
             }
             if (e.getSource() == messages) {
                 //implement
