@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class UserInterface extends JComponent implements Runnable{
@@ -13,27 +17,29 @@ public class UserInterface extends JComponent implements Runnable{
     JButton messages;
     JButton logOut;
     Socket socket;
+    PrintWriter writer;
+    BufferedReader bfr;
+    ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == settingButton) {
-                frame.setVisible(false);
-                UserSettingGUI.runUserSettingGUI(user, socket);
-                frame.setVisible(true);
+                UserSettingGUI.runUserSettingGUI(user, socket, writer, bfr, objectInputStream, objectOutputStream);
+                frame.dispose();
             }
             if (e.getSource() == stores) {
                 if (user.isBuyer()) {
                     System.out.println("execute seller");
-                    frame.setVisible(false);
+
                     SellerGUI sellerGUI = new SellerGUI(user.getUserName());
-                    frame.setVisible(true);
+                    frame.dispose();
                     sellerGUI.run();
                 }
                 if (user.isSeller()) {
                     System.out.println("execute buyer");
-                    frame.setVisible(false);
                     CustomerGUI customerGUI = new CustomerGUI();
-                    frame.setVisible(true);
+                    frame.dispose();
                     customerGUI.runCustomerGUI();
                 }
             }
@@ -41,18 +47,26 @@ public class UserInterface extends JComponent implements Runnable{
                 //implement
             }
             if (e.getSource() == logOut) {
-                LogInGUI.runLogInGUI(socket);
+                LogInGUI.runLogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream);
+                frame.dispose();
             }
         }
     };
-    public UserInterface(User user, Socket socket) {
+    public UserInterface(User user, Socket socket, PrintWriter writer, BufferedReader bfr,
+                         ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+
         this.user = user;
         this.socket = socket;
+        this.writer = writer;
+        this.bfr = bfr;
+        this.objectInputStream = objectInputStream;
+        this.objectOutputStream = objectOutputStream;
     }
 
-    public static void runUserInterface(User user, Socket socket) {
+    public static void runUserInterface(User user, Socket socket, PrintWriter writer, BufferedReader bfr,
+                                        ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
 
-        SwingUtilities.invokeLater(new UserInterface(user, socket));
+        SwingUtilities.invokeLater(new UserInterface(user, socket, writer, bfr, objectInputStream, objectOutputStream));
     }
     public void run() {
         panel = new JPanel();

@@ -18,6 +18,7 @@ public class LogInGUI extends JComponent implements Runnable {
     PrintWriter writer;
     BufferedReader bfr;
     ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -39,7 +40,7 @@ public class LogInGUI extends JComponent implements Runnable {
                                 JOptionPane.INFORMATION_MESSAGE);
                         logInUser = (User) objectInputStream.readObject();
                         frame.dispose();
-                        UserInterface.runUserInterface(logInUser, socket);
+                        UserInterface.runUserInterface(logInUser, socket, writer, bfr, objectInputStream, objectOutputStream);
 
                     } else {
                         System.out.println("no log in");
@@ -57,28 +58,27 @@ public class LogInGUI extends JComponent implements Runnable {
             }
             if (e.getSource() == registerButton) {
                 frame.dispose();
-                RegisterGUI.runRegisterGUI(socket);
+                RegisterGUI.runRegisterGUI(socket, bfr, writer, objectInputStream, objectOutputStream);
             }
         }
     };
-
-
-    public LogInGUI(Socket socket) {
+    public LogInGUI(Socket socket, BufferedReader bfr, PrintWriter writer, ObjectInputStream objectInputStream,
+                    ObjectOutputStream objectOutputStream) {
         this.socket = socket;
+        this.bfr = bfr;
+        this.writer = writer;
+        this.objectInputStream = objectInputStream;
+        this.objectOutputStream = objectOutputStream;
     }
 
-    public static void runLogInGUI(Socket socket) {
-        SwingUtilities.invokeLater(new LogInGUI(socket));
+
+
+    public static void runLogInGUI(Socket socket, BufferedReader bfr, PrintWriter writer,
+                                   ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+        SwingUtilities.invokeLater(new LogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream));
     }
 
     public void run() {
-        try {
-            writer = new PrintWriter(socket.getOutputStream());
-            bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         panel = new JPanel();
         panel.setLayout(null);
         frame = new JFrame();

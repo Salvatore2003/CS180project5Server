@@ -1,10 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class RegisterGUI extends JComponent implements Runnable {
@@ -25,6 +22,10 @@ public class RegisterGUI extends JComponent implements Runnable {
     JRadioButton buyerButton;
     JRadioButton sellerButton;
     Socket socket;
+    PrintWriter writer;
+    BufferedReader bfr;
+    ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -73,8 +74,6 @@ public class RegisterGUI extends JComponent implements Runnable {
                 if (validUser) {
                     try {
                         String line;
-                        PrintWriter writer = new PrintWriter(socket.getOutputStream());
-                        BufferedReader bfr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                         writer.write("New User");
                         writer.println();
                         writer.flush();
@@ -89,7 +88,7 @@ public class RegisterGUI extends JComponent implements Runnable {
                             JOptionPane.showMessageDialog(null, "Account Successfully Created",
                                     "Account Creation", JOptionPane.INFORMATION_MESSAGE);
                             frame.dispose();
-                            LogInGUI.runLogInGUI(socket);
+                            LogInGUI.runLogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream);
                         } else if (line.contains("username exist error")) {
                             JOptionPane.showMessageDialog(null, "Username already exist",
                                     "Account Creation Error", JOptionPane.ERROR_MESSAGE);
@@ -109,18 +108,24 @@ public class RegisterGUI extends JComponent implements Runnable {
             }
             if (e.getSource() == exitButton) {
                 frame.dispose();
-                LogInGUI.runLogInGUI(socket);
+                LogInGUI.runLogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream);
 
             }
         }
     };
 
-    public RegisterGUI(Socket socket) {
+    public RegisterGUI(Socket socket, BufferedReader bfr, PrintWriter writer, ObjectInputStream objectInputStream,
+                       ObjectOutputStream objectOutputStream) {
         this.socket = socket;
+        this.bfr = bfr;
+        this.writer = writer;
+        this.objectInputStream = objectInputStream;
+        this.objectOutputStream = objectOutputStream;
     }
 
-    public static void runRegisterGUI(Socket socket) {
-        SwingUtilities.invokeLater(new RegisterGUI(socket));
+    public static void runRegisterGUI(Socket socket, BufferedReader bfr, PrintWriter writer,
+                                      ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+        SwingUtilities.invokeLater(new RegisterGUI(socket, bfr, writer, objectInputStream, objectOutputStream));
     }
 
     @Override

@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.net.Socket;
 
 public class UserSettingGUI extends JComponent implements Runnable{
@@ -14,13 +15,57 @@ public class UserSettingGUI extends JComponent implements Runnable{
     JButton editRole;
     JButton exit;
     Socket socket;
+    PrintWriter writer;
+    BufferedReader bfr;
+    ObjectInputStream objectInputStream;
+    ObjectOutputStream objectOutputStream;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == editUsername){
                 String newUsername;
+                String errors = "";
+                String userNameExistResult = "";
                 newUsername = JOptionPane.showInputDialog(null, "Enter new Username",
                         "Edit Username", JOptionPane.QUESTION_MESSAGE);
+                if(newUsername.contains(" ")) {
+                    errors += "Username cannot contain spaces.\n";
+                }
+                if (newUsername.length() < 5){
+                    errors += "Username must be at least 5 characters long.";
+                }
+                if (newUsername.equals(user.getUserName())) {
+                    errors += "Entered current username. Please enter a different username.";
+
+                } else {
+                    writer.write("check for existing usernames");
+                    writer.println();
+                    writer.flush();
+                    writer.write(newUsername);
+                    writer.println();
+                    writer.flush();
+                    try {
+                        userNameExistResult = bfr.readLine();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    if (userNameExistResult.equals("username exist")) {
+                        errors += "Username already exist. Please try another one.";
+                    }
+                }
+                if (errors.equals("")) {
+
+                    changeUserInfo("username", newUsername);
+                    user.setUserName(newUsername);
+
+                    JOptionPane.showMessageDialog(null, "Username has been changed.",
+                            "Change Username", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, errors, "Change username errors",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+
             }
             if (e.getSource() == editPassword) {
                 String newPassword;
@@ -40,6 +85,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
                     JOptionPane.showMessageDialog(null, errors, "New password error",
                             JOptionPane.ERROR_MESSAGE);
                 } else {
+                    changeUserInfo("password", newPassword);
                     JOptionPane.showMessageDialog(null, "Successfully changed password",
                             "New Password", JOptionPane.INFORMATION_MESSAGE);
                     user.setPassword(newPassword);
@@ -62,6 +108,22 @@ public class UserSettingGUI extends JComponent implements Runnable{
                     JOptionPane.showMessageDialog(null, errors, "New email error",
                             JOptionPane.ERROR_MESSAGE);
                 } else {
+                    changeUserInfo("email", newEmail);
+                    /*writer.write("changing user info");
+                    writer.println();
+                    writer.flush();
+                    writer.write("email");
+                    writer.println();
+                    writer.flush();
+                    writer.write(newEmail);
+                    writer.println();
+                    writer.flush();
+                    try {
+                        System.out.println(user.toString());
+                        objectOutputStream.writeObject(user);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }*/
                     JOptionPane.showMessageDialog(null, "Successfully changed email", "New email",
                             JOptionPane.INFORMATION_MESSAGE);
                     user.setUserEmail(newEmail);
@@ -82,18 +144,25 @@ public class UserSettingGUI extends JComponent implements Runnable{
                 }
             }
             if (e.getSource() == exit) {
+                UserInterface.runUserInterface(user, socket, writer, bfr, objectInputStream, objectOutputStream);
                 frame.dispose();
-                UserInterface.runUserInterface(user, socket);
             }
         }
     };
-    public UserSettingGUI(User user, Socket socket) {
+    public UserSettingGUI(User user, Socket socket, PrintWriter writer, BufferedReader bfr,
+                          ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         this.user = user;
         this.socket = socket;
-    }
-    public static void runUserSettingGUI(User user, Socket socket) {
+        this.writer = writer;
+        this.bfr = bfr;
+        this.objectInputStream = objectInputStream;
+        this.objectOutputStream = objectOutputStream;
 
-        SwingUtilities.invokeLater(new UserSettingGUI(user, socket));
+    }
+    public static void runUserSettingGUI(User user, Socket socket, PrintWriter writer, BufferedReader bfr,
+                                         ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+
+        SwingUtilities.invokeLater(new UserSettingGUI(user, socket, writer, bfr, objectInputStream, objectOutputStream));
     }
     @Override
     public void run() {
@@ -127,5 +196,25 @@ public class UserSettingGUI extends JComponent implements Runnable{
         panel.add(editRole);
         panel.add(exit);
         frame.setVisible(true);
+    }
+    public void changeUserInfo(String infoChanging, String newInfo) {
+        writer.write("changing user info");
+        writer.println();
+        writer.flush();
+        writer.write(infoChanging);
+        writer.println();
+        writer.flush();
+        writer.write(newInfo);
+        writer.println();
+        writer.flush();
+        try {
+            System.out.println("execute 1");
+            System.out.println(user.getUserName());
+            objectOutputStream.writeObject(user);
+            objectOutputStream.reset();
+            System.out.println("execute 2");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

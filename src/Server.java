@@ -4,8 +4,6 @@ import java.net.*;
 import java.util.ArrayList;
 
 public class Server {
-    BufferedReader reader;
-    PrintWriter writer;
     static ArrayList <User> users;
     final static Object obj = new Object();
 
@@ -42,11 +40,12 @@ public class Server {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
                 PrintWriter writer = new PrintWriter(serverSocket.getOutputStream());
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
+                ObjectInputStream objectInputStream = new ObjectInputStream(serverSocket.getInputStream());
                 do {
-
+                    System.out.println("back to top");
                     action = reader.readLine();
-
-                    if (action.equals("New User")) {
+                    System.out.println(action);
+                    if (action.contains("New User")) {
                         synchronized (obj) {
                             try {
                                 User newUser = makeAccount(reader);
@@ -77,10 +76,16 @@ public class Server {
                             }
                         }
                     }
-                    if (action.equals("Logging in")) {
+                    if (action.contains("Logging in")) {
                         synchronized (obj) {
                             logInAttempt(reader, writer, objectOutputStream);
                         }
+                    }
+                    if (action.contains("check for existing usernames")) {
+                        checkNewUsername(reader, writer);
+                    }
+                    if (action.contains("changing user info")) {
+                        changeUserInfo(reader, writer, objectInputStream);
                     }
                 } while (runThread);
                 writer.close();
@@ -140,6 +145,7 @@ public class Server {
         int indexOfUser = 0;
         boolean userNameExist = false;
         boolean logInSuccess = false;
+        System.out.println("logging");
 
         try {
             userNameAttempt = bfr.readLine();
@@ -157,11 +163,11 @@ public class Server {
                 }
             }
             if (logInSuccess) {
-
                 writer.write("log in success");
                 writer.println();
                 writer.flush();
                 objectOutputStream.writeObject(users.get(indexOfUser));
+                objectOutputStream.reset();
             } else {
                 writer.write("log in fail");
                 writer.println();
@@ -174,5 +180,61 @@ public class Server {
         }
         System.out.println("end of log in");
 
+    }
+    public static void checkNewUsername(BufferedReader bfr, PrintWriter writer) {
+        try {
+            String newUsername = bfr.readLine();
+            if (checkForExistingUsername(newUsername)) {
+                writer.write("valid new username");
+            } else {
+                writer.write("username exist");
+            }
+            writer.println();
+            writer.flush();
+        } catch (IOException e) {
+            writer.write("error");
+            writer.println();
+            writer.flush();
+            e.printStackTrace();
+        }
+    }
+    public static void changeUserInfo(BufferedReader bfr, PrintWriter writer, ObjectInputStream objectInputStream) {
+        String infoChange = "";
+        User user;
+        int indexOfUser = -1;
+        String newUserInfo;
+        try {
+            infoChange = bfr.readLine();
+            System.out.println("Execute 2");
+            user = (User) objectInputStream.readObject();
+            System.out.println("Execute 3");
+            newUserInfo = bfr.readLine();
+            System.out.println("passed in username " + user.getUserName());
+
+            for (int i = 0; i < users.size(); i++) {
+                System.out.println(users.get(i).getUserName());
+                if (users.get(i).getUserName().equals(user.getUserName())) {
+
+                    indexOfUser = i;
+                    break;
+                }
+            }
+            if (infoChange.equals("username")) {
+                users.get(indexOfUser).setUserName(newUserInfo);
+            } else if (infoChange.equals("password")) {
+                users.get(indexOfUser).setPassword(newUserInfo);
+            } else if (infoChange.equals("email")) {
+                users.get(indexOfUser).setUserEmail(newUserInfo);
+            } else if (infoChange.equals("role")) {
+
+            }
+            ServerFileManager.storeUserData(users);
+            users = ServerFileManager.recoverUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
