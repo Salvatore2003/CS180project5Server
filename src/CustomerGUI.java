@@ -1,16 +1,40 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Vector;
+import java.awt.*;
 
 
-public class CustomerGUI {
+public class CustomerGUI extends JComponent implements Runnable {
+    JButton bookTutor;
+    JButton message;
+    JButton statistics;
 
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == bookTutor) {
+
+            }
+            if (e.getSource() == message) {
+
+            }
+            if (e.getSource() == statistics) {
+
+            }
+        }
+    };
     public static void runCustomerGUI() {
+
+        SwingUtilities.invokeLater(new CustomerGUI());
+    }
+    public void run() {
         try {
             String storeName = JOptionPane.showInputDialog(null, "What is the name of Store?", "Info Form",
                     JOptionPane.QUESTION_MESSAGE);
@@ -41,6 +65,21 @@ public class CustomerGUI {
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.getContentPane().add(new JScrollPane(new JTable(m)));
             f.setSize(600, 300);
+            JPanel panel = new JPanel();
+            f.add(panel, BorderLayout.SOUTH);
+            bookTutor = new JButton("Book Tutor");
+            bookTutor.addActionListener(actionListener);
+            panel.add(bookTutor);
+            message = new JButton("Message Tutor");
+            message.addActionListener(actionListener);
+            panel.add(message);
+            statistics = new JButton("View Statistics Dashboard");
+            statistics.addActionListener(actionListener);
+            panel.add(statistics);
+
+
+
+
             f.setVisible(true);
 
         } catch (Exception e) {
