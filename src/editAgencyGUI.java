@@ -58,7 +58,11 @@ public class editAgencyGUI extends JComponent implements Runnable {
                     if (flag) {
                         throw new InvalidTutor("The tutor name has been repeated please add again");
                     }
-
+                    for (int i = 0; i < tutors.size(); i++) {
+                        if (tutors.get(i).getTutorName().equals(tutorName1)) {
+                            tutors.set(i, tutor);
+                        }
+                    }
                     writeFile(tutors);
                 } catch (InvalidTutor e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
@@ -179,7 +183,7 @@ public class editAgencyGUI extends JComponent implements Runnable {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
             for (int i = 0; i < tutors.size(); i++) {
-                infoLine = String.format("%s,%s,%s,%d,%f,%d", tutors.get(i).getTutorName(),
+                infoLine = String.format("%s,%s,%s,%d,%.1f,%d", tutors.get(i).getTutorName(),
                         tutors.get(i).getAgencyName(), tutors.get(i).getAboutMe(),
                         tutors.get(i).getHoursAvailable(), tutors.get(i).getHourlyRate(),
                         tutors.get(i).getHoursPromised());
