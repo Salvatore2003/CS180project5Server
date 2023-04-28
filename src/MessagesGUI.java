@@ -105,3 +105,89 @@ public class UserMessagesGUI {
         bottomPanel.add(viewOutboxButton);
     }
 }*/
+
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+
+public class MessagesGUI extends JFrame {
+    private JTextArea messagesArea;
+    private JTextField inputField;
+    private JButton sendButton;
+    private JScrollPane scrollPane;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
+    private PrintWriter writer;
+
+    public MessagesGUI(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, PrintWriter writer) {
+        this.objectOutputStream = objectOutputStream;
+        this.objectInputStream = objectInputStream;
+        this.writer = writer;
+
+        initUI();
+    }
+
+    private void initUI() {
+        setTitle("Messages");
+        setSize(600, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        messagesArea = new JTextArea();
+        messagesArea.setEditable(false);
+        scrollPane = new JScrollPane(messagesArea);
+
+        inputField = new JTextField();
+        inputField.setPreferredSize(new Dimension(450, 30));
+
+        sendButton = new JButton("Send");
+        sendButton.setPreferredSize(new Dimension(120, 30));
+        sendButton.addActionListener(new SendButtonListener());
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(inputField, BorderLayout.CENTER);
+        bottomPanel.add(sendButton, BorderLayout.EAST);
+
+        add(scrollPane, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    private class SendButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String message = inputField.getText().trim();
+
+            if (!message.isEmpty()) {
+                try {
+                    // Sending message to the server
+                    writer.println("MESSAGE:" + message);
+                    writer.flush();
+
+                    // Append sent message to the messages area
+                    messagesArea.append("You: " + message + "\n");
+
+                    inputField.setText("");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(MessagesGUI.this,
+                            "Failed to send the message.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
+    public void displayMessage(String message) {
+        messagesArea.append(message + "\n");
+    }
+}

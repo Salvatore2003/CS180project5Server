@@ -18,12 +18,24 @@ public class editAgencyGUI extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e1) {
             if (e1.getSource() == addButton) {
-                ArrayList<Tutor> tutors = new ArrayList<>();
-                ArrayList<Tutor> tutorsAdd = new ArrayList<>();
-                tutors = readFile();
-                tutorsAdd = takeInput2();
-                tutors.addAll(tutorsAdd);
-                writeFile(tutors);
+                try {
+                    ArrayList<Tutor> tutors = new ArrayList<>();
+                    ArrayList<Tutor> tutorsAdd = new ArrayList<>();
+                    tutors = readFile();
+                    tutorsAdd = takeInput2();
+                    boolean flag = false;
+                    for(int i = 0; i < tutorsAdd.size(); i++) {
+                        flag = checkTutor(tutors, tutorsAdd.get(i));
+                        if(flag){
+                            throw new InvalidTutor("A tutor name has been repeated please add again after correcting");
+                        }
+                        tutors.addAll(tutorsAdd);
+                    }
+                    writeFile(tutors);
+                } catch (InvalidTutor e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
+
+                }
             }
             if (e1.getSource() == editButton) {
                 try {
@@ -37,18 +49,20 @@ public class editAgencyGUI extends JComponent implements Runnable {
                             flag = false;
                         }
                     }
-                    if(flag) {
+                    if (flag) {
                         throw new InvalidTutor("This tutor was not found in this store");
                     }
 
                     Tutor tutor = takeInput1();
+                    flag = checkTutor(tutors, tutor);
+                    if (flag) {
+                        throw new InvalidTutor("The tutor name has been repeated please add again");
+                    }
                     for (int i = 0; i < tutors.size(); i++) {
                         if (tutors.get(i).getTutorName().equals(tutorName1)) {
                             tutors.set(i, tutor);
-                            flag = false;
                         }
                     }
-
                     writeFile(tutors);
                 } catch (InvalidTutor e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
@@ -79,7 +93,7 @@ public class editAgencyGUI extends JComponent implements Runnable {
                     }
                     writeFile(tutors);
                 } catch (InvalidTutor e) {
-                        JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
 
                 }
             }
@@ -169,7 +183,7 @@ public class editAgencyGUI extends JComponent implements Runnable {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
             for (int i = 0; i < tutors.size(); i++) {
-                infoLine = String.format("%s,%s,%s,%d,%f,%d", tutors.get(i).getTutorName(),
+                infoLine = String.format("%s,%s,%s,%d,%.1f,%d", tutors.get(i).getTutorName(),
                         tutors.get(i).getAgencyName(), tutors.get(i).getAboutMe(),
                         tutors.get(i).getHoursAvailable(), tutors.get(i).getHourlyRate(),
                         tutors.get(i).getHoursPromised());
@@ -222,11 +236,11 @@ public class editAgencyGUI extends JComponent implements Runnable {
         String method = (String) JOptionPane.showInputDialog(null, "How would you like to enter the Tutor information", "Info Form",
                 JOptionPane.PLAIN_MESSAGE, null, options, null);
 
-        if(method.equals(options[0])) {
+        if (method.equals(options[0])) {
             tutor = takeInput1();
             tutors.add(tutor);
         }
-        if(method.equals(options[1])) {
+        if (method.equals(options[1])) {
             fileName = JOptionPane.showInputDialog(null, "What is the name of the File?", "Info Form",
                     JOptionPane.QUESTION_MESSAGE);
             try {
@@ -246,13 +260,22 @@ public class editAgencyGUI extends JComponent implements Runnable {
                     tutors.add(tutor);
                     infoLine = bfr.readLine();
                 }
-            } catch(FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 System.out.println("lol");
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return tutors;
+    }
+
+    public boolean checkTutor(ArrayList<Tutor> tutors, Tutor tutor) {
+        boolean flag = false;
+        for(int i = 0; i < tutors.size(); i++){
+            if(tutors.get(i).getTutorName().equals(tutor.getTutorName())){
+                flag = true;
+            }
+        }
+        return flag;
     }
 }
