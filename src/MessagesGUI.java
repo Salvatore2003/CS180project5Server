@@ -117,29 +117,32 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 
-public class MessagesGUI extends JFrame {
+public class MessagesGUI extends JComponent implements Runnable {
     private JTextArea messagesArea;
     private JTextField inputField;
     private JButton sendButton;
     private JScrollPane scrollPane;
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
-    private PrintWriter writer;
+    private static ObjectOutputStream objectOutputStream;
+    private static ObjectInputStream objectInputStream;
+    private static PrintWriter writer;
 
     public MessagesGUI(ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream, PrintWriter writer) {
         this.objectOutputStream = objectOutputStream;
         this.objectInputStream = objectInputStream;
         this.writer = writer;
-
-        initUI();
     }
 
-    private void initUI() {
-        setTitle("Messages");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(new MessagesGUI(objectOutputStream,  objectInputStream, writer));
+    }
+
+    public void run() {
+        JFrame frame = new JFrame();
+        frame.setTitle("Messages");
+        frame.setSize(600, 400);
+
+        frame.setLayout(new BorderLayout());
 
         messagesArea = new JTextArea();
         messagesArea.setEditable(false);
@@ -159,7 +162,8 @@ public class MessagesGUI extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setVisible(true);
+        frame.setVisible(true);
+
     }
 
     private class SendButtonListener implements ActionListener {

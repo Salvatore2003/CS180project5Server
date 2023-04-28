@@ -61,6 +61,7 @@ public class CustomerGUI extends JComponent implements Runnable {
                     }
                     writeFile(tutors);
                     updateTable();
+                    m.fireTableDataChanged();
                     JOptionPane.showMessageDialog(null, "Booking has been Made", "Booking Form", JOptionPane.PLAIN_MESSAGE);
 
 
@@ -205,7 +206,7 @@ public class CustomerGUI extends JComponent implements Runnable {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
             for (int i = 0; i < tutors.size(); i++) {
-                infoLine = String.format("%s,%s,%s,%d,%f,%d", tutors.get(i).getTutorName(),
+                infoLine = String.format("%s,%s,%s,%d,%.1f,%d", tutors.get(i).getTutorName(),
                         tutors.get(i).getAgencyName(), tutors.get(i).getAboutMe(),
                         tutors.get(i).getHoursAvailable(), tutors.get(i).getHourlyRate(),
                         tutors.get(i).getHoursPromised());
