@@ -13,6 +13,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
     JButton editPassword;
     JButton editEmail;
     JButton editRole;
+    JButton deleteUser;
     JButton exit;
     Socket socket;
     PrintWriter writer;
@@ -141,6 +142,17 @@ public class UserSettingGUI extends JComponent implements Runnable{
                         user.setBuyer(false);
                         user.setSeller(true);
                     }
+                    changeUserInfo("role", "none");
+                }
+            }
+            if (e.getSource() == deleteUser) {
+                int userConfirmation;
+                userConfirmation = JOptionPane.showConfirmDialog(null, "Are you sure you" +
+                        " want to delete your account?", "Delete Account", JOptionPane.YES_NO_OPTION);
+                if (userConfirmation == 0) {
+                    changeUserInfo("delete account", "none");
+                    frame.dispose();
+                    LogInGUI.runLogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream);
                 }
             }
             if (e.getSource() == exit) {
@@ -172,7 +184,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
         frame.setTitle("Settings");
         frame.setLocation(new Point(750, 280));
         frame.add(panel);
-        frame.setSize(new Dimension(270, 230));
+        frame.setSize(new Dimension(265, 270));
         editUsername = new JButton("Edit Username");
         editUsername.setBounds(10, 5, 240, 30);
         editUsername.addActionListener(actionListener);
@@ -185,8 +197,11 @@ public class UserSettingGUI extends JComponent implements Runnable{
         editRole = new JButton("Edit role");
         editRole.setBounds(10, 110, 240, 30);
         editRole.addActionListener(actionListener);
+        deleteUser = new JButton("Delete User");
+        deleteUser.setBounds(10, 145, 240, 30);
+        deleteUser.addActionListener(actionListener);
         exit = new JButton("exit");
-        exit.setBounds(10, 145, 240, 30);
+        exit.setBounds(10, 180, 240, 30);
         exit.addActionListener(actionListener);
 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -194,6 +209,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
         panel.add(editPassword);
         panel.add(editEmail);
         panel.add(editRole);
+        panel.add(deleteUser);
         panel.add(exit);
         frame.setVisible(true);
     }
