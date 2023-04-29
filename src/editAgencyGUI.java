@@ -166,7 +166,6 @@ public class editAgencyGUI extends JComponent implements Runnable {
                 Tutor tutor = new Tutor(tutorName, agencyName, aboutMe, hoursAvailable, hourlyRate, hoursPromised);
                 tutors.add(tutor);
                 infoLine = bfr.readLine();
-
             }
         } catch (IOException e) {
             e.printStackTrace();

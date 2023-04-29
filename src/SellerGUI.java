@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -9,6 +10,8 @@ public class SellerGUI extends JComponent implements Runnable {
     JButton editButton;
     JButton deleteButton;
     JButton exitButton;
+    JButton purchaseHistory;
+    JButton statistics;
     private static String user;
     ActionListener actionListener = new ActionListener() {
         @Override
@@ -36,6 +39,12 @@ public class SellerGUI extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null, "Agency has been Deleted.", "Delete Form", JOptionPane.PLAIN_MESSAGE);
                 }
             }
+            if (e.getSource() == purchaseHistory) {
+
+            }
+            if (e.getSource() == statistics) {
+
+            }
             if (e.getSource() == exitButton) {
 
             }
@@ -46,7 +55,7 @@ public class SellerGUI extends JComponent implements Runnable {
         this.user = user;
     }
 
-    public static void runSellerGUI(String[] args) {
+    public static void main(String[] args) {
 
         SwingUtilities.invokeLater(new SellerGUI(user));
     }
@@ -56,9 +65,9 @@ public class SellerGUI extends JComponent implements Runnable {
         panel.setLayout(null);
         JFrame frame = new JFrame();
         frame.setTitle("Seller Interface");
-        frame.setLocation(new Point(500, 300));
+        frame.setLocation(new Point(500, 200));
         frame.add(panel);
-        frame.setSize(new Dimension(350, 320));
+        frame.setSize(new Dimension(350, 450));
         createButton = new JButton("Create A New Tutor Agency");
         createButton.setBounds(20, 50, 300, 30);
         createButton.addActionListener(actionListener);
@@ -71,8 +80,17 @@ public class SellerGUI extends JComponent implements Runnable {
         deleteButton.setBounds(20, 170, 300, 30);
         deleteButton.addActionListener(actionListener);
         panel.add(deleteButton);
+
+        purchaseHistory = new JButton("Purchase History");
+        purchaseHistory.setBounds(20, 230, 300, 30);
+        purchaseHistory.addActionListener(actionListener);
+        panel.add(purchaseHistory);
+        statistics = new JButton("Statistics");
+        statistics.setBounds(20, 290, 300, 30);
+        statistics.addActionListener(actionListener);
+        panel.add(statistics);
         exitButton = new JButton("Exit Interface");
-        exitButton.setBounds(20, 230, 300, 30);
+        exitButton.setBounds(20, 350, 300, 30);
         exitButton.addActionListener(actionListener);
         panel.add(exitButton);
         frame.setVisible(true);
@@ -81,7 +99,7 @@ public class SellerGUI extends JComponent implements Runnable {
     public boolean createFile(String user, String agencyName) {
         File dir = new File("./src/");
         String fileName = user + "_" + agencyName;
-        File file = new File(dir, fileName + ".csv");
+        File file = new File(dir, fileName);
         boolean flag = false;
         try {
             if (searchAgency(agencyName)) {
@@ -115,7 +133,7 @@ public class SellerGUI extends JComponent implements Runnable {
                 }
             }
         } else {
-           flag = false;
+            flag = false;
         }
         return flag;
     }

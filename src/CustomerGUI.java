@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -7,19 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Vector;
-import java.awt.*;
 
 
 public class CustomerGUI extends JComponent implements Runnable {
     JButton bookTutor;
-    JButton message;
+    JButton purchaseHistory;
     JButton statistics;
     JButton exit;
     String fileName;
     ArrayList<Tutor> tutors;
     DefaultTableModel m;
-    JPanel panel;
-    JFrame f;
+    private static String user;
+    String agencyName;
 
     ActionListener actionListener = new ActionListener() {
         @Override
@@ -62,6 +62,8 @@ public class CustomerGUI extends JComponent implements Runnable {
                         }
                     }
                     writeFile(tutors);
+                    Customer customer = new Customer(user, agencyName, tutorName1, hoursBooked, tutor.getHourlyRate());
+                    writeBooking(customer);
                     updateTable();
                     m.fireTableDataChanged();
                     JOptionPane.showMessageDialog(null, "Booking has been Made", "Booking Form", JOptionPane.PLAIN_MESSAGE);
@@ -71,8 +73,9 @@ public class CustomerGUI extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            if (e1.getSource() == message) {
-
+            if (e1.getSource() == purchaseHistory) {
+                CustomerPurchaseHistoryGui customerPurchaseHistoryGui = new CustomerPurchaseHistoryGui(user);
+                customerPurchaseHistoryGui.run();
             }
             if (e1.getSource() == statistics) {
 
@@ -82,13 +85,18 @@ public class CustomerGUI extends JComponent implements Runnable {
             }
         }
     };
-    public static void runCustomerGUI() {
 
-        SwingUtilities.invokeLater(new CustomerGUI());
+    public CustomerGUI(String User){
+        this.user = user;
+    }
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(new CustomerGUI(user));
     }
     public void run() {
         try {
-            String storeName = JOptionPane.showInputDialog(null, "What is the name of Store?", "Info Form",
+            createFile(user);
+            agencyName = JOptionPane.showInputDialog(null, "What is the name of Store?", "Info Form",
                     JOptionPane.QUESTION_MESSAGE);
             String directory = "./src/"; //Directory path must be here
             File dir = new File(directory);
@@ -104,7 +112,7 @@ public class CustomerGUI extends JComponent implements Runnable {
 
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
-                    if (files[i].getName().contains(storeName)) {
+                    if (files[i].getName().contains(agencyName)) {
                         fileName = "./src/" + (files[i].getName());
                     }
                 }
@@ -113,18 +121,19 @@ public class CustomerGUI extends JComponent implements Runnable {
             m = createTableModel(fin, headers);
 
 
-            f = new JFrame();
+            JFrame f = new JFrame();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.getContentPane().add(new JScrollPane(new JTable(m)));
+            f.setTitle("Customer Interface");
             f.setSize(600, 300);
-            panel = new JPanel();
+            JPanel panel = new JPanel();
             f.add(panel, BorderLayout.SOUTH);
             bookTutor = new JButton("Book Tutor");
             bookTutor.addActionListener(actionListener);
             panel.add(bookTutor);
-            message = new JButton("Message Tutor");
-            message.addActionListener(actionListener);
-            panel.add(message);
+            purchaseHistory = new JButton("Purchase History");
+            purchaseHistory.addActionListener(actionListener);
+            panel.add(purchaseHistory);
             statistics = new JButton("View Statistics Dashboard");
             statistics.addActionListener(actionListener);
             panel.add(statistics);
@@ -223,7 +232,6 @@ public class CustomerGUI extends JComponent implements Runnable {
 
     public void updateTable() {
         try {
-
             Vector<Object> headers = new Vector<Object>();
             headers.add(new Vector<Object>(Arrays.asList("Tutor Name")));
             headers.add(new Vector<Object>(Arrays.asList("Store Name")));
@@ -238,5 +246,43 @@ public class CustomerGUI extends JComponent implements Runnable {
             e.printStackTrace();
         }
 
+    }
+
+    public void createFile(String user) {
+        File dir = new File("./src/");
+        String fileName = "Customer_" + user;
+        File file = new File(dir, fileName);
+        boolean flag = false;
+        try {
+            flag = file.createNewFile();
+            if (flag) {
+                JOptionPane.showMessageDialog(null, "Welcome Back", "Create Form", JOptionPane.PLAIN_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Welcome New Customer", "Create Form", JOptionPane.ERROR_MESSAGE);
+                flag = false;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error while creating file", "Create Form", JOptionPane.ERROR_MESSAGE);
+            flag = false;
+        }
+    }
+
+    public void writeBooking(Customer customer){
+        String fileName = "Customer_" + user;
+        String directory = "./src/"; //Directory path must be here
+        File dir = new File(directory);
+        File file = new File(dir, fileName);
+        String infoLine = String.format("%s,%s,%s,%d, %.1f", customer.getCustomerName(), customer.getAgencyName(),
+                customer.getTutorName(), customer.getHoursBooked(), customer.getHourlyRate());
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
+
+            bw.write(infoLine);
+            bw.newLine();
+
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
