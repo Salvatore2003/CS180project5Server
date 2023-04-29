@@ -214,7 +214,6 @@ public class Server {
             for (int i = 0; i < users.size(); i++) {
                 System.out.println(users.get(i).getUserName());
                 if (users.get(i).getUserName().equals(user.getUserName())) {
-
                     indexOfUser = i;
                     break;
                 }
@@ -226,7 +225,16 @@ public class Server {
             } else if (infoChange.equals("email")) {
                 users.get(indexOfUser).setUserEmail(newUserInfo);
             } else if (infoChange.equals("role")) {
-
+                if (users.get(indexOfUser).isBuyer()) {
+                    users.get(indexOfUser).setSeller(true);
+                    users.get(indexOfUser).setBuyer(false);
+                } else {
+                    users.get(indexOfUser).setBuyer(true);
+                    users.get(indexOfUser).setSeller(false);
+                }
+            }
+            if (infoChange.equals("delete account")) {
+                users.remove(indexOfUser);
             }
             ServerFileManager.storeUserData(users);
             users = ServerFileManager.recoverUsers();

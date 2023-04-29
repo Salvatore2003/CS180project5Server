@@ -81,7 +81,7 @@ public class SellerGUI extends JComponent implements Runnable {
     public boolean createFile(String user, String agencyName) {
         File dir = new File("./src/");
         String fileName = user + "_" + agencyName;
-        File file = new File(dir, fileName);
+        File file = new File(dir, fileName + ".csv");
         boolean flag = false;
         try {
             if (searchAgency(agencyName)) {

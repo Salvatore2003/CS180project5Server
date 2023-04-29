@@ -18,6 +18,8 @@ public class CustomerGUI extends JComponent implements Runnable {
     String fileName;
     ArrayList<Tutor> tutors;
     DefaultTableModel m;
+    JPanel panel;
+    JFrame f;
 
     ActionListener actionListener = new ActionListener() {
         @Override
@@ -110,11 +112,11 @@ public class CustomerGUI extends JComponent implements Runnable {
             m = createTableModel(fin, headers);
 
 
-            JFrame f = new JFrame();
+            f = new JFrame();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.getContentPane().add(new JScrollPane(new JTable(m)));
             f.setSize(600, 300);
-            JPanel panel = new JPanel();
+            panel = new JPanel();
             f.add(panel, BorderLayout.SOUTH);
             bookTutor = new JButton("Book Tutor");
             bookTutor.addActionListener(actionListener);
@@ -220,6 +222,7 @@ public class CustomerGUI extends JComponent implements Runnable {
 
     public void updateTable() {
         try {
+
             Vector<Object> headers = new Vector<Object>();
             headers.add(new Vector<Object>(Arrays.asList("Tutor Name")));
             headers.add(new Vector<Object>(Arrays.asList("Store Name")));
