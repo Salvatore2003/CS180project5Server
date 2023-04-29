@@ -12,7 +12,7 @@ public class SellerGUI extends JComponent implements Runnable {
     JButton exitButton;
     JButton purchaseHistory;
     JButton statistics;
-    private static String user;
+    private static String user = "blamarca3";
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -40,7 +40,8 @@ public class SellerGUI extends JComponent implements Runnable {
                 }
             }
             if (e.getSource() == purchaseHistory) {
-
+                SellerPurchaseHistoryGUI sellerPurchaseHistoryGUI = new SellerPurchaseHistoryGUI(user);
+                sellerPurchaseHistoryGUI.run();
             }
             if (e.getSource() == statistics) {
 
