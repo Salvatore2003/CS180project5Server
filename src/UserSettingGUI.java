@@ -4,7 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
-
+/**
+ * UserSettingGUI
+ * <p>
+ * the user setting GUI that allows the users to change their info
+ *
+ * @author Bryce LaMarca, Lab 25
+ * @version 4/20/2023
+ */
 public class UserSettingGUI extends JComponent implements Runnable{
     User user;
     JPanel panel;
@@ -157,6 +164,15 @@ public class UserSettingGUI extends JComponent implements Runnable{
         this.objectOutputStream = objectOutputStream;
 
     }
+
+    /**
+     * runs the user setting GUI
+     * @param socket the server socket
+     * @param bfr the reader
+     * @param writer writer to files
+     * @param objectInputStream the object input stream that receives objects
+     * @param objectOutputStream the object output stream that outputs object
+     */
     public static void runUserSettingGUI(User user, Socket socket, PrintWriter writer, BufferedReader bfr,
                                          ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
 
@@ -170,7 +186,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
         frame.setTitle("Settings");
         frame.setLocation(new Point(750, 280));
         frame.add(panel);
-        frame.setSize(new Dimension(265, 270));
+        frame.setSize(new Dimension(275, 270));
         editUsername = new JButton("Edit Username");
         editUsername.setBounds(10, 5, 240, 30);
         editUsername.addActionListener(actionListener);
@@ -199,6 +215,12 @@ public class UserSettingGUI extends JComponent implements Runnable{
         panel.add(exit);
         frame.setVisible(true);
     }
+
+    /**
+     * writes to the user what is being changed and what it is being changed to
+     * @param infoChanging the info changing such as username
+     * @param newInfo what is the new info, such as new username
+     */
     public void changeUserInfo(String infoChanging, String newInfo) {
         writer.write("changing user info");
         writer.println();

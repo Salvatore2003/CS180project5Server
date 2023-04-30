@@ -1,7 +1,15 @@
-import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+
+/**
+ * Server
+ * <p>
+ * The server that stores the user info and allows the users  to edit their user info
+ *
+ * @author Bryce LaMarca, Lab 25
+ * @version 4/30/2023
+ */
 
 public class Server {
     static ArrayList <User> users;
@@ -31,20 +39,24 @@ public class Server {
             this.serverSocket = serverSocket;
         }
 
+        /**
+         * makes a new thread to run multiple clients
+         */
         @Override
         public void run() {
             try {
                 boolean runThread = true;
 
-                String action;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-                PrintWriter writer = new PrintWriter(serverSocket.getOutputStream());
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
-                ObjectInputStream objectInputStream = new ObjectInputStream(serverSocket.getInputStream());
+                String action; //the action the user enters
+                BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream())); //the
+                //buffered reader
+                PrintWriter writer = new PrintWriter(serverSocket.getOutputStream()); //the writer
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream()); // the
+                //object output stream to output objects
+                ObjectInputStream objectInputStream = new ObjectInputStream(serverSocket.getInputStream()); //receives
+                //objects from the client
                 do {
-                    System.out.println("back to top");
                     action = reader.readLine();
-                    System.out.println(action);
                     if (action.contains("New User")) {
                         synchronized (obj) {
                             try {
@@ -52,24 +64,20 @@ public class Server {
 
                                 if (newUser != null) {
                                     users.add(newUser);
-                                    System.out.println("account good");
                                     writer.write("account created");
                                     writer.println();
                                     writer.flush();
                                     ServerFileManager.storeUserData(users);
                                 } else {
-                                    System.out.println("error 2");
                                     writer.write("error occur");
                                     writer.println();
                                     writer.flush();
                                 }
                             } catch (UsernameExistError e) {
-                                System.out.println("executing error");
                                 writer.write("username exist error");
                                 writer.println();
                                 writer.flush();
                             } catch (Exception e) {
-                                System.out.println("error 3");
                                 writer.write("error");
                                 writer.println();
                                 writer.flush();
@@ -96,14 +104,21 @@ public class Server {
             }
         }
     }
+
+    /**
+     * makes a new account for the user
+     * @param reader the reader that reads the info
+     * @return the user that is made
+     * @throws UsernameExistError if the username already exist an error is thrown
+     */
     public static User makeAccount(BufferedReader reader) throws UsernameExistError{
         try {
-            String line;
-            String userName;
-            String password;
-            String email;
-            boolean isBuyer;
-            boolean isSeller;
+            String line; //the line that is read from the client
+            String userName; //the username
+            String password; //the password for the account
+            String email; //the email for the account
+            boolean isBuyer; //if the role is buyer
+            boolean isSeller; //if the role is seller
             line = reader.readLine();
             userName = line.substring(0, line.indexOf(" "));
             if (!checkForExistingUsername(userName)) {
@@ -113,14 +128,10 @@ public class Server {
             password = line.substring(0, line.indexOf(" "));
             line = line.substring(line.indexOf(" ") + 1);
             email = line.substring(0, line.indexOf(" "));
-            System.out.println(line);
             line = line.substring(line.indexOf(" ") + 1);
             isBuyer = Boolean.parseBoolean(line.substring(0, line.indexOf(" ")));
-            System.out.println(line);
             line = line.substring(line.indexOf(" ") + 1);
-            System.out.println(line);
             isSeller = Boolean.parseBoolean(line);
-            System.out.println("returning");
             return new User(userName, password, email, isBuyer, isSeller);
 
         } catch (IOException e) {
@@ -128,6 +139,12 @@ public class Server {
             return null;
         }
     }
+
+    /**
+     * checks if there is already an existing username
+     * @param userName the potential username
+     * @return true if it is a new username false if not
+     */
     public static boolean checkForExistingUsername(String userName) {
         if (users!= null) {
             for (int i = 0; i < users.size(); i++) {
@@ -138,13 +155,19 @@ public class Server {
         }
         return true;
     }
+
+    /**
+     * the attempted log in that the user has
+     * @param bfr the buffer reader that reads from the client
+     * @param writer the writer that writes to the client
+     * @param objectOutputStream the object output stream that the program uses
+     */
     public static void logInAttempt(BufferedReader bfr, PrintWriter writer, ObjectOutputStream objectOutputStream) {
-        String userNameAttempt;
-        String passwordAttempt;
-        int indexOfUser = 0;
-        boolean userNameExist = false;
-        boolean logInSuccess = false;
-        System.out.println("logging");
+        String userNameAttempt; //the attempted username that is entered
+        String passwordAttempt; //the attempted password that is entered
+        int indexOfUser = 0; //the index that the user is located in users
+        boolean userNameExist = false; //if the username exist
+        boolean logInSuccess = false; //if the login is successful
 
         try {
             userNameAttempt = bfr.readLine();
@@ -177,17 +200,19 @@ public class Server {
             e.printStackTrace();
 
         }
-        System.out.println("end of log in");
-
     }
+
+    /**
+     * checks to see if the new username already exist
+     * @param bfr reads from the client
+     * @param writer writes to the client
+     */
     public static void checkNewUsername(BufferedReader bfr, PrintWriter writer) {
         try {
-            String newUsername = bfr.readLine();
+            String newUsername = bfr.readLine(); //the new username that is entered
             if (checkForExistingUsername(newUsername)) {
-                System.out.println("execute new username valid");
                 writer.write("valid new username");
             } else {
-                System.out.println("username not valud");
                 writer.write("username exist");
             }
             writer.println();
@@ -199,18 +224,24 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+    /**
+     * changes the userinfo
+     * @param bfr reads from the client
+     * @param writer writes to the client
+     * @param objectInputStream reads object from the client
+     */
     public static void changeUserInfo(BufferedReader bfr, PrintWriter writer, ObjectInputStream objectInputStream) {
-        String infoChange = "";
-        User user;
-        int indexOfUser = -1;
-        String newUserInfo;
+        String infoChange = ""; //info being changed
+        User user; //the user that is being changed
+        int indexOfUser = -1; //the location that user is in array list users
+        String newUserInfo; //the new info
         try {
             infoChange = bfr.readLine();
             user = (User) objectInputStream.readObject();
             newUserInfo = bfr.readLine();
 
             for (int i = 0; i < users.size(); i++) {
-                System.out.println(users.get(i).getUserName());
                 if (users.get(i).getUserName().equals(user.getUserName())) {
                     indexOfUser = i;
                     break;

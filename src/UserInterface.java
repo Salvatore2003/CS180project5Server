@@ -7,7 +7,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+/**
+ * UserInterface
+ * <p>
+ * The interface that the user interacts with once logged in
+ *
+ * @author Bryce LaMarca, Lab 25
+ * @version 4/20/2023
+ */
 public class UserInterface extends JComponent implements Runnable{
     JPanel panel;
     JFrame frame;
@@ -60,6 +67,14 @@ public class UserInterface extends JComponent implements Runnable{
         this.objectOutputStream = objectOutputStream;
     }
 
+    /**
+     * runs the user interface
+     * @param socket the server socket
+     * @param bfr the reader
+     * @param writer writer to files
+     * @param objectInputStream the object input stream that receives objects
+     * @param objectOutputStream the object output stream that outputs object
+     */
     public static void runUserInterface(User user, Socket socket, PrintWriter writer, BufferedReader bfr,
                                         ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
 
