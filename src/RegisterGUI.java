@@ -27,6 +27,10 @@ public class RegisterGUI extends JComponent implements Runnable {
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
     ActionListener actionListener = new ActionListener() {
+        /**
+         * The action listener that waits for  an even to occur
+         * @param e the event to be processed
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == registerButton) {
@@ -83,7 +87,6 @@ public class RegisterGUI extends JComponent implements Runnable {
                         writer.println();
                         writer.flush();
                         line = bfr.readLine();
-                        System.out.println(line);
                         if (line.contains("account created")) {
                             JOptionPane.showMessageDialog(null, "Account Successfully Created",
                                     "Account Creation", JOptionPane.INFORMATION_MESSAGE);
@@ -123,6 +126,14 @@ public class RegisterGUI extends JComponent implements Runnable {
         this.objectOutputStream = objectOutputStream;
     }
 
+    /**
+     * runs the registration gui
+     * @param socket the server socket
+     * @param bfr the reader
+     * @param writer writer to files
+     * @param objectInputStream the object input stream that receives objects
+     * @param objectOutputStream the object output stream that outputs object
+     */
     public static void runRegisterGUI(Socket socket, BufferedReader bfr, PrintWriter writer,
                                       ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         SwingUtilities.invokeLater(new RegisterGUI(socket, bfr, writer, objectInputStream, objectOutputStream));

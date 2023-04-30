@@ -107,7 +107,6 @@ public class Server {
             line = reader.readLine();
             userName = line.substring(0, line.indexOf(" "));
             if (!checkForExistingUsername(userName)) {
-                System.out.println("executing this error");
                 throw new UsernameExistError("The username already exist.");
             }
             line = line.substring(line.indexOf(" ") + 1);
@@ -185,8 +184,10 @@ public class Server {
         try {
             String newUsername = bfr.readLine();
             if (checkForExistingUsername(newUsername)) {
+                System.out.println("execute new username valid");
                 writer.write("valid new username");
             } else {
+                System.out.println("username not valud");
                 writer.write("username exist");
             }
             writer.println();
@@ -205,11 +206,8 @@ public class Server {
         String newUserInfo;
         try {
             infoChange = bfr.readLine();
-            System.out.println("Execute 2");
             user = (User) objectInputStream.readObject();
-            System.out.println("Execute 3");
             newUserInfo = bfr.readLine();
-            System.out.println("passed in username " + user.getUserName());
 
             for (int i = 0; i < users.size(); i++) {
                 System.out.println(users.get(i).getUserName());

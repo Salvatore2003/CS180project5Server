@@ -3,6 +3,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+/**
+ * LogInGUI
+ *
+ * This GUI allows for a user to log in. If a user does not have an account they can make an account.
+ *
+ * @author Bryce LaMarca, Lab 25
+ *
+ * @version 4/30/2023
+ *
+ */
 
 public class LogInGUI extends JComponent implements Runnable {
     JLabel usernameLabel;
@@ -20,6 +30,10 @@ public class LogInGUI extends JComponent implements Runnable {
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
     ActionListener actionListener = new ActionListener() {
+        /**
+         * waits for a button to be pressed and then executes apporiate steps
+         * @param e the event to be processed
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == signInButton) {
@@ -36,21 +50,21 @@ public class LogInGUI extends JComponent implements Runnable {
                     writer.println();
                     writer.flush();
                     if (bfr.readLine().contains("log in success")) {
-                        JOptionPane.showMessageDialog(null, "Successful log in", "Tutor Service",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Successful log in",
+                                "Tutor Service", JOptionPane.INFORMATION_MESSAGE);
                         logInUser = (User) objectInputStream.readObject();
                         frame.dispose();
-                        UserInterface.runUserInterface(logInUser, socket, writer, bfr, objectInputStream, objectOutputStream);
+                        UserInterface.runUserInterface(logInUser, socket, writer, bfr, objectInputStream,
+                                objectOutputStream);
 
                     } else {
-                        System.out.println("no log in");
-                        JOptionPane.showMessageDialog(null, "Invalid Username or password", "Tutor Service",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Invalid Username or password",
+                                "Tutor Service", JOptionPane.ERROR_MESSAGE);
                     }
 
                 } catch (IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Error connecting to server", "Tutor Service",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,
+                            "Error connecting to server", "Tutor Service", JOptionPane.ERROR_MESSAGE);
                 } catch (ClassNotFoundException ex) {
                     JOptionPane.showMessageDialog(null, "Error logging in", "Tutor Service",
                             JOptionPane.ERROR_MESSAGE);
@@ -72,12 +86,22 @@ public class LogInGUI extends JComponent implements Runnable {
     }
 
 
-
+    /**
+     * runs the Log in GUI
+     * @param socket the server socket
+     * @param bfr the reader
+     * @param writer writer to files
+     * @param objectInputStream the object input stream that receives objects
+     * @param objectOutputStream the object output stream that outputs object
+     */
     public static void runLogInGUI(Socket socket, BufferedReader bfr, PrintWriter writer,
                                    ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         SwingUtilities.invokeLater(new LogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream));
     }
 
+    /**
+     * runs the LogInGUI
+     */
     public void run() {
         panel = new JPanel();
         panel.setLayout(null);

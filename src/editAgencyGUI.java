@@ -277,4 +277,5 @@ public class editAgencyGUI extends JComponent implements Runnable {
         }
         return flag;
     }
+
 }

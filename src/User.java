@@ -116,15 +116,11 @@ public class User implements Serializable {
     public boolean isSeller() {
         return seller;
     }
-    //Nick did the parts below this line
 
-    public ArrayList<Message> getInbox() { return inbox; }
-
-    public void setInbox(ArrayList<Message> inbox) { this.inbox = inbox; }
-
-    public ArrayList<Message> getOutbox() { return outbox; }
-
-    public void setOutbox(ArrayList<Message> outbox) { this.outbox = outbox; }
+    /**
+     * converts  to object to a string
+     * @return the string of information that the object contains
+     */
 
     @Override
     public String toString() {

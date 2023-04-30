@@ -72,7 +72,7 @@ public class UserInterface extends JComponent implements Runnable{
         frame.setTitle("User Interface");
         frame.setLocation(new Point(750, 250));
         frame.add(panel);
-        frame.setSize(new Dimension(270, 200));
+        frame.setSize(new Dimension(280, 170));
 
         settingButton = new JButton("Settings");
         settingButton.setBounds(10, 0, 240, 30);
@@ -84,13 +84,9 @@ public class UserInterface extends JComponent implements Runnable{
         stores.addActionListener(actionListener);
         panel.add(stores);
 
-        messages = new JButton("Messages");
-        messages.setBounds(10, 80, 240, 30);
-        messages.addActionListener(actionListener);
-        panel.add(messages);
 
         logOut = new JButton("Log out");
-        logOut.setBounds(10, 120, 240, 30);
+        logOut.setBounds(10, 80, 240, 30);
         logOut.addActionListener(actionListener);
         panel.add(logOut);
 

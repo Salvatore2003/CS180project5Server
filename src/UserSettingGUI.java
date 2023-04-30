@@ -50,7 +50,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-                    if (userNameExistResult.equals("username exist")) {
+                    if (userNameExistResult.contains("username exist")) {
                         errors += "Username already exist. Please try another one.";
                     }
                 }
@@ -90,7 +90,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
                     JOptionPane.showMessageDialog(null, "Successfully changed password",
                             "New Password", JOptionPane.INFORMATION_MESSAGE);
                     user.setPassword(newPassword);
-                    System.out.println(user.getPassword());
+
                 }
             }
             if (e.getSource() == editEmail) {
@@ -110,21 +110,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
                             JOptionPane.ERROR_MESSAGE);
                 } else {
                     changeUserInfo("email", newEmail);
-                    /*writer.write("changing user info");
-                    writer.println();
-                    writer.flush();
-                    writer.write("email");
-                    writer.println();
-                    writer.flush();
-                    writer.write(newEmail);
-                    writer.println();
-                    writer.flush();
-                    try {
-                        System.out.println(user.toString());
-                        objectOutputStream.writeObject(user);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }*/
+
                     JOptionPane.showMessageDialog(null, "Successfully changed email", "New email",
                             JOptionPane.INFORMATION_MESSAGE);
                     user.setUserEmail(newEmail);
@@ -224,11 +210,8 @@ public class UserSettingGUI extends JComponent implements Runnable{
         writer.println();
         writer.flush();
         try {
-            System.out.println("execute 1");
-            System.out.println(user.getUserName());
             objectOutputStream.writeObject(user);
             objectOutputStream.reset();
-            System.out.println("execute 2");
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
