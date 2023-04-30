@@ -47,7 +47,7 @@ public class CustomerPurchaseHistoryGui extends JComponent implements Runnable {
         f.setVisible(true);
     }
 
-    public String getPurchaseHistory(String user) {
+    public synchronized String getPurchaseHistory(String user) {
         String agencyName;
         String tutorName;
         int hoursBooked;

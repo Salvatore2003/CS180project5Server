@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ServerFileManager {
-    public static void storeUserData(ArrayList<User> users) {
+    public synchronized static void storeUserData(ArrayList<User> users) {
         try {
             FileWriter fw = new FileWriter("userInfo.txt"); //file writer to write the  file
             BufferedWriter bfw = new BufferedWriter(fw); //buffer reader to read the file
@@ -16,7 +16,7 @@ public class ServerFileManager {
             e.printStackTrace();
         }
     }
-    public static ArrayList<User> recoverUsers() {
+    public synchronized static ArrayList<User> recoverUsers() {
         String line; //the line that is read
         String userName; //users username to be stored
         String password; //users passwords to be stored

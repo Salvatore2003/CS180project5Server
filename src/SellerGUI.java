@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectStreamException;
 
 public class SellerGUI extends JComponent implements Runnable {
     JButton createButton;
@@ -138,7 +139,8 @@ public class SellerGUI extends JComponent implements Runnable {
         return flag;
     }
 
-    public boolean deleteStore(String user, String agencyName) {
+    public synchronized boolean deleteStore(String user, String agencyName) {
+
         String fileName = user + "_" + agencyName;
         String directory = "./src/"; //Directory path must be here
         File dir = new File(directory);

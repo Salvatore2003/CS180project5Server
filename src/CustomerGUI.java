@@ -148,7 +148,7 @@ public class CustomerGUI extends JComponent implements Runnable {
         }
     }
 
-    public static DefaultTableModel createTableModel(Reader in,
+    public synchronized static DefaultTableModel createTableModel(Reader in,
                                                      Vector<Object> headers) {
         DefaultTableModel model = null;
         Scanner s = null;
@@ -177,7 +177,7 @@ public class CustomerGUI extends JComponent implements Runnable {
 
     }
 
-    public ArrayList<Tutor> readFile() {
+    public synchronized ArrayList<Tutor> readFile() {
         ArrayList<Tutor> tutors = new ArrayList<>();
         String tutorName;
         String aboutMe;
@@ -211,7 +211,7 @@ public class CustomerGUI extends JComponent implements Runnable {
         return tutors;
     }
 
-    public void writeFile(ArrayList<Tutor> tutors) {
+    public synchronized void writeFile(ArrayList<Tutor> tutors) {
         File file = new File(fileName);
         String infoLine;
         try {
@@ -230,7 +230,7 @@ public class CustomerGUI extends JComponent implements Runnable {
         }
     }
 
-    public void updateTable() {
+    public synchronized void updateTable() {
         try {
             Vector<Object> headers = new Vector<Object>();
             headers.add(new Vector<Object>(Arrays.asList("Tutor Name")));
@@ -267,7 +267,7 @@ public class CustomerGUI extends JComponent implements Runnable {
         }
     }
 
-    public void writeBooking(Customer customer){
+    public synchronized void writeBooking(Customer customer){
         String fileName = "Customer_" + user;
         String directory = "./src/"; //Directory path must be here
         File dir = new File(directory);

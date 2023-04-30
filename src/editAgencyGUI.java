@@ -139,7 +139,7 @@ public class editAgencyGUI extends JComponent implements Runnable {
         frame.setVisible(true);
     }
 
-    public ArrayList<Tutor> readFile() {
+    public synchronized ArrayList<Tutor> readFile() {
         String fileName = user + "_" + agencyName;
         ArrayList<Tutor> tutors = new ArrayList<>();
         String tutorName;
