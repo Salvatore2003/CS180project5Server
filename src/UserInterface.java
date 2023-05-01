@@ -84,7 +84,7 @@ public class UserInterface extends JComponent implements Runnable{
         panel = new JPanel();
         panel.setLayout(null);
         frame = new JFrame();
-        frame.setTitle("User Interface");
+        frame.setTitle("User Interface " + user.getUserName());
         frame.setLocation(new Point(750, 250));
         frame.add(panel);
         frame.setSize(new Dimension(280, 170));
