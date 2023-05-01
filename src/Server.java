@@ -171,9 +171,11 @@ public class Server {
             newUserInfo = bfr.readLine();
 
             for (int i = 0; i < users.size(); i++) {
-                if (users.get(i).getUserName().equals(user.getUserName())) {
-                    indexOfUser = i;
-                    break;
+                if (users.size() > 0 && users != null) {
+                    if (users.get(i).getUserName().equals(user.getUserName())) {
+                        indexOfUser = i;
+                        break;
+                    }
                 }
             }
             if (infoChange.contains("username")) {
