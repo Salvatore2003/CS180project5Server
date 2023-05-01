@@ -4,6 +4,18 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * editAgencyGUI
+ *
+ * Class runs the interface for editing an agency on the seller side. Allows adding, deleting or editing
+ * information for a tutor.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
+
 public class editAgencyGUI extends JComponent implements Runnable {
     JButton addButton;
     JButton editButton;
@@ -13,6 +25,12 @@ public class editAgencyGUI extends JComponent implements Runnable {
     private static String agencyName;
     JPanel panel;
     JFrame frame;
+
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
+
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -106,11 +124,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         this.user = user;
         this.agencyName = agencyName;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new editAgencyGUI(user, agencyName));
-    }
-
+    /**
+     * runs the edit Agency gui
+     *
+     */
     public void run() {
         try {
             String fileName = user + "_" + agencyName;
@@ -151,6 +168,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         }
     }
 
+    /**
+     * reads the file
+     *
+     */
     public synchronized ArrayList<Tutor> readFile() {
         String fileName = user + "_" + agencyName;
         ArrayList<Tutor> tutors = new ArrayList<>();
@@ -180,11 +201,16 @@ public class editAgencyGUI extends JComponent implements Runnable {
                 infoLine = bfr.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
         return tutors;
     }
 
+    /**
+     * writes the files
+     * @param tutors arraylist for tutors
+     */
     public void writeFile(ArrayList<Tutor> tutors) {
         String fileName = user + "_" + agencyName;
         String directory = "./src/"; //Directory path must be here
@@ -203,32 +229,46 @@ public class editAgencyGUI extends JComponent implements Runnable {
             }
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
     }
-
+    /**
+     * takes only manual inputs
+     *
+     */
     public Tutor takeInput1() {
         String tutorName;
         String aboutMe;
         int hoursAvailable;
         double hourlyRate;
         int hoursPromised;
+        Tutor tutor = null;
+        try {
+            tutorName = JOptionPane.showInputDialog(null, "What is the name of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE);
+            aboutMe = JOptionPane.showInputDialog(null, "Write the aboutMe for the Tutor", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE);
+            hoursAvailable = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours available of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE));
+            hourlyRate = Double.parseDouble(JOptionPane.showInputDialog(null, "What is the hourly rate of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE));
+            hoursPromised = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours promised of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE));
+            tutor = new Tutor(tutorName, agencyName, aboutMe, hoursAvailable, hourlyRate, hoursPromised);
 
-        tutorName = JOptionPane.showInputDialog(null, "What is the name of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE);
-        aboutMe = JOptionPane.showInputDialog(null, "Write the aboutMe for the Tutor", "Info Form",
-                JOptionPane.QUESTION_MESSAGE);
-        hoursAvailable = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours available of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE));
-        hourlyRate = Double.parseDouble(JOptionPane.showInputDialog(null, "What is the hourly rate of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE));
-        hoursPromised = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours promised of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE));
-        Tutor tutor = new Tutor(tutorName, agencyName, aboutMe, hoursAvailable, hourlyRate, hoursPromised);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
         return tutor;
     }
-
+    /**
+     * takes files inputs
+     *
+     */
     public ArrayList<Tutor> takeInput2() {
         ArrayList<Tutor> tutors = new ArrayList<>();
         Tutor tutor;
@@ -272,13 +312,24 @@ public class editAgencyGUI extends JComponent implements Runnable {
                     infoLine = bfr.readLine();
                 }
             } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                        JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
         return tutors;
     }
 
+    /**
+     * checks if a tutor object is in the arraylist
+     * @param tutor object to be checked
+     * @param tutors arraylist to be checked against
+     */
     public boolean checkTutor(ArrayList<Tutor> tutors, Tutor tutor) {
         boolean flag = false;
         for(int i = 0; i < tutors.size(); i++){

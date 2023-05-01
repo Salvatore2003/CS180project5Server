@@ -1,3 +1,15 @@
+/**
+ * Customer
+ *
+ * This class defines the object of a customer with all its attributes using fields.
+ * Class used mainly in the customerGUI to track purchases and save an arrayList as a file.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
+
 public class Customer {
     String customerName;
     String agencyName;

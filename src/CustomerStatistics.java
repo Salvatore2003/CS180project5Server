@@ -10,6 +10,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.ArrayList;
 
+/**
+ * CustomerStatistics
+ *
+ * Summarizes the transactions of the customer and displays them. Also allows for increasing and decreasing
+ * sorts based on alphabetical order.
+ *
+ * @author Rakshit Pradhan, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 
 public class CustomerStatistics extends JComponent implements Runnable {
     JButton exit;
@@ -18,7 +29,10 @@ public class CustomerStatistics extends JComponent implements Runnable {
     JTextArea area;
     private static String user;
     JFrame f;
-
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -38,10 +52,9 @@ public class CustomerStatistics extends JComponent implements Runnable {
     public CustomerStatistics(String user) {
         this.user = user;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new  CustomerStatistics(user));
-    }
+    /**
+     * runs the customer statistics gui
+     */
     public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,7 +79,10 @@ public class CustomerStatistics extends JComponent implements Runnable {
         f.getContentPane().add(scrollPane);
         f.setVisible(true);
     }
-
+    /**
+     * reads the files and compiles into statistics
+     * @param user string username
+     */
     public String getStatistics(String user) {
         String agencyName;
         String tutorName;
@@ -115,7 +131,10 @@ public class CustomerStatistics extends JComponent implements Runnable {
 
         return text;
     }
-
+    /**
+     * reads the files and compiles into statistics increasing order
+     * @param user string username
+     */
     public String getStatisticsIncreasing(String user) {
         String agencyName;
         String tutorName;
@@ -164,7 +183,10 @@ public class CustomerStatistics extends JComponent implements Runnable {
         }
         return text;
     }
-
+    /**
+     * reads the files and compiles into statistics decreasing order
+     * @param user string username
+     */
     public String getStatisticsDecreasing(String user) {
         String agencyName;
         String tutorName;

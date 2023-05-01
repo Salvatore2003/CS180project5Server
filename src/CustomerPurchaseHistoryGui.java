@@ -7,11 +7,26 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * CustomerPurchaseHistoryGUI
+ *
+ * Class displays the purchase history of the current customer in a JTextArea. This is done by
+ * accessing the file of the customer.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 public class CustomerPurchaseHistoryGui extends JComponent implements Runnable {
     JButton exit;
     private static String user;
     JFrame f;
 
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -25,10 +40,10 @@ public class CustomerPurchaseHistoryGui extends JComponent implements Runnable {
     public CustomerPurchaseHistoryGui(String user) {
         this.user = user;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new CustomerPurchaseHistoryGui(user));
-    }
+    /**
+     * runs the CustomerPurchaseHistoryGui
+     *
+     */
     public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,7 +62,10 @@ public class CustomerPurchaseHistoryGui extends JComponent implements Runnable {
         f.getContentPane().add(scrollPane);
         f.setVisible(true);
     }
-
+    /**
+     * reads the customer file
+     * @param user string username
+     */
     public synchronized String getPurchaseHistory(String user) {
         String agencyName;
         String tutorName;
@@ -72,7 +90,6 @@ public class CustomerPurchaseHistoryGui extends JComponent implements Runnable {
                 hoursBooked = Integer.parseInt(split[3]);
                 text = text + String.format("Booked Tutor: %s\nAgency: %s\nHours Booked: %d\n", tutorName,agencyName,hoursBooked);
                 i++;
-                System.out.println(text);
                 infoLine = bfr.readLine();
             }
         } catch (IOException e) {

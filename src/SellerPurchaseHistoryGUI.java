@@ -6,12 +6,26 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
+/**
+ * SellerPurchaseHistoryGUI
+ *
+ * Class runs the interface to show the seller purchase history from
+ * various agencies and various customers.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
     JButton exit;
     String user;
     JFrame f;
 
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -25,7 +39,9 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
     public SellerPurchaseHistoryGUI(String user) {
         this.user = user;
     }
-
+    /**
+     * runs the seller purchase history gui
+     */
     public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +60,10 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
         f.getContentPane().add(scrollPane);
         f.setVisible(true);
     }
-
+    /**
+     * gets the purchase history of all the agencies
+     * @param storeNames array of agency names
+     */
     public String getPurchaseHistory(String[] storeNames) {
         String customerName;
         String agencyName;
@@ -79,7 +98,8 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
                             }
 
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                     }
 
@@ -90,7 +110,10 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
 
         return text;
     }
-
+    /**
+     * gets the all the agency names of the user
+     * @param user username
+     */
     public String[] getStoreNames(String user) {
         String directory = "./src/"; //Directory path must be here
         File dir = new File(directory);
@@ -114,7 +137,8 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
                 }
             }
         } else {
-            System.out.println("No such files found in directory.");
+            JOptionPane.showMessageDialog(null, "No such files found in directory.", "Info Form", JOptionPane.ERROR_MESSAGE);
+
         }
         return storeNames;
     }

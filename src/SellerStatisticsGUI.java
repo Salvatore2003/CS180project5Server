@@ -1,3 +1,14 @@
+/**
+ * SellerStatisticsGUI
+ *
+ * Class runs the interface to show the seller statistics to summarize the purchase history and show
+ * the transactions done by the agency manager, each agency and each customer in that agency.
+ *
+ * @author Rakshit Pradhan, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +23,10 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
     JButton exit;
     String user;
     JFrame f;
-
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -26,7 +40,9 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
     public SellerStatisticsGUI(String user) {
         this.user = user;
     }
-
+    /**
+     * runs the seller statistics gui
+     */
    public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,6 +62,10 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
         f.setVisible(true);
     }
 
+    /**
+     * gets the statistics of all the agencies
+     * @param storeNames array of all the agency names
+     */
     public String getStatisitcs(String[] storeNames) {
         String customerName = "";
         ArrayList<SellerStatistics> sellerStatisticsArrayList = new ArrayList<>();
@@ -78,7 +98,7 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
                                     count++;
                                     count2++;
                                     count3++;
-                                    System.out.println(count2);
+
                                 }
                                 infoLine = bfr.readLine();
                             }
@@ -87,7 +107,8 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
                                 sellerStatisticsArrayList.add(sellerStatistics);
                             }
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                         count2Array[j] = count2Array[j] + count;
                     }
@@ -107,7 +128,10 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
         }
         return text;
     }
-
+    /**
+     * gets the name of all the stores of the user
+     * @param user username
+     */
     public String[] getStoreNames(String user) {
         String directory = "./src/"; //Directory path must be here
         File dir = new File(directory);
@@ -131,7 +155,8 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
                 }
             }
         } else {
-            System.out.println("No such files found in directory.");
+            JOptionPane.showMessageDialog(null,"No such files found in directory." , "Info Form", JOptionPane.ERROR_MESSAGE);
+
         }
         return storeNames;
     }

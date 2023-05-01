@@ -5,7 +5,17 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectStreamException;
-
+/**
+ * SellerGUI
+ *
+ * Class runs the interface for the seller or agency manager. Allows adding, editing and deleting agencies.
+ * You can also access other interfaces for the agency manager through this class.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 public class SellerGUI extends JComponent implements Runnable {
     JButton createButton;
     JButton editButton;
@@ -15,6 +25,11 @@ public class SellerGUI extends JComponent implements Runnable {
     JButton statistics;
     JFrame frame;
     String user;
+
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e the event to be processed
+     */
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -58,7 +73,9 @@ public class SellerGUI extends JComponent implements Runnable {
     public SellerGUI(String user) {
         this.user = user;
     }
-
+    /**
+     * runs the seller gui
+     */
     public void run() {
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -93,7 +110,11 @@ public class SellerGUI extends JComponent implements Runnable {
         panel.add(exitButton);
         frame.setVisible(true);
     }
-
+    /**
+     * creates an agency file
+     * @param user which is username
+     * @param agencyName which is the name of the agency
+     */
     public boolean createFile(String user, String agencyName) {
         File dir = new File("./src/");
         String fileName = user + "_" + agencyName;
@@ -118,7 +139,10 @@ public class SellerGUI extends JComponent implements Runnable {
         }
         return flag;
     }
-
+    /**
+     * searches the directory for the agency file
+     * @param agencyName which is the name of the agency
+     */
     public boolean searchAgency(String agencyName) {
         String directory = "./src/"; //Directory path must be here
         File dir = new File(directory);
@@ -135,7 +159,11 @@ public class SellerGUI extends JComponent implements Runnable {
         }
         return flag;
     }
-
+    /**
+     * deletes an agency file
+     * @param user which is username
+     * @param agencyName which is the name of the agency
+     */
     public synchronized boolean deleteStore(String user, String agencyName) {
 
         String fileName = user + "_" + agencyName;

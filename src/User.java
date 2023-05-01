@@ -16,8 +16,6 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private String userEmail;
-    private ArrayList<Message> inbox;
-    private ArrayList<Message> outbox;
     boolean buyer;
     boolean seller;
 
@@ -27,8 +25,6 @@ public class User implements Serializable {
         this.userEmail = userEmail;
         this.buyer = buyer;
         this.seller = seller;
-        //inbox = new ArrayList<Message>();
-        //outbox = new ArrayList<Message>();
     }
 
     public User (String userName, String password, String userEmail) {
