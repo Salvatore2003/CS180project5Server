@@ -54,11 +54,49 @@ ServerFileManager
 This class allows for a file of the users to be written. This class also can read that file, so the users
 are never lost and  can always be recovered.
 
+Customer
+This class defines the object of a customer with all its attributes using fields. Class used mainly
+in the customerGUI to track purchases and save an arrayList as a file.
 
+CustomerGUI
+This class runs the interface on the customer side. You can access any store, see the data of the store,
+make a booking, search using a keyword, and access other Customer interfaces as well.
 
+CustomerPurchaseHistoryGUI
+Class displays the purchase history of the current customer in a JTextArea. This is done by
+accessing the file of the customer.
 
+CustomerStatistics
+Summarizes the transactions of the customer and displays them. Also allows for increasing and decreasing
+sorts based on alphabetical order.
 
+SellerGUI
+Class runs the interface for the seller or agency manager. Allows adding, editing and deleting agencies.
+You can also access other interfaces for the agency manager through this class.
 
+editAgencyGUI
+Class runs the interface for editing an agency on the seller side. Allows adding, deleting or editing
+information for a tutor.
 
+InvalidAgencyName
+Exception if an invalid agency name is entered throughout the code.
+
+InvalidTutor
+Exception if an invalid tutor name is entered throughout the code.
+
+SellerPurchaseHistoryGUI
+Class runs the interface to show the seller purchase history from various agencies and various customers.
+
+SellerStatistics
+Class defines the object for seller statistics and its attributes as a field which is used in
+the SellerStatisticsGUI.
+
+SellerStatisticsGUI
+Class runs the interface to show the seller statistics to summarize the purchase history and show
+the transactions done by the agency manager, each agency and each customer in that agency.
+
+Tutor
+Class defines the object for Tutor and its attributes. It is used in various other classes to read files
+for agencies and store information in multiple Tutor objects.
 
 Bryce will submit the project report, code, and presentation
