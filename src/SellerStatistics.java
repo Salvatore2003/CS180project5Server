@@ -1,3 +1,14 @@
+/**
+ * SellerStatistics
+ *
+ * Class defines the object for seller statistics and its attributes as a field which is used in
+ * the SellerStatisticsGUI.
+ *
+ * @author Rakshit Pradhan, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 public class SellerStatistics {
     String agencyName;
     String customerName;

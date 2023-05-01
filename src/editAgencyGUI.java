@@ -4,6 +4,18 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * editAgencyGUI
+ *
+ * Class runs the interface for editing an agency on the seller side. Allows adding, deleting or editing
+ * information for a tutor.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
+
 public class editAgencyGUI extends JComponent implements Runnable {
     JButton addButton;
     JButton editButton;
@@ -13,6 +25,12 @@ public class editAgencyGUI extends JComponent implements Runnable {
     private static String agencyName;
     JPanel panel;
     JFrame frame;
+
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
+
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -106,11 +124,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         this.user = user;
         this.agencyName = agencyName;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new editAgencyGUI(user, agencyName));
-    }
-
+    /**
+     * runs the edit Agency gui
+     *
+     */
     public void run() {
         try {
             String fileName = user + "_" + agencyName;
@@ -151,6 +168,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         }
     }
 
+    /**
+     * reads the file
+     *
+     */
     public synchronized ArrayList<Tutor> readFile() {
         String fileName = user + "_" + agencyName;
         ArrayList<Tutor> tutors = new ArrayList<>();
@@ -185,6 +206,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         return tutors;
     }
 
+    /**
+     * writes the files
+     * @param tutors arraylist for tutors
+     */
     public void writeFile(ArrayList<Tutor> tutors) {
         String fileName = user + "_" + agencyName;
         String directory = "./src/"; //Directory path must be here
@@ -207,7 +232,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         }
 
     }
-
+    /**
+     * takes only manual inputs
+     *
+     */
     public Tutor takeInput1() {
         String tutorName;
         String aboutMe;
@@ -228,7 +256,10 @@ public class editAgencyGUI extends JComponent implements Runnable {
         Tutor tutor = new Tutor(tutorName, agencyName, aboutMe, hoursAvailable, hourlyRate, hoursPromised);
         return tutor;
     }
-
+    /**
+     * takes files inputs
+     *
+     */
     public ArrayList<Tutor> takeInput2() {
         ArrayList<Tutor> tutors = new ArrayList<>();
         Tutor tutor;
@@ -279,6 +310,11 @@ public class editAgencyGUI extends JComponent implements Runnable {
         return tutors;
     }
 
+    /**
+     * checks if a tutor object is in the arraylist
+     * @param tutor object to be checked
+     * @param tutors arraylist to be checked against
+     */
     public boolean checkTutor(ArrayList<Tutor> tutors, Tutor tutor) {
         boolean flag = false;
         for(int i = 0; i < tutors.size(); i++){

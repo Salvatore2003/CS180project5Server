@@ -1,3 +1,14 @@
+/**
+ * Tutor
+ *
+ * Class defines the object for Tutor and its attributes. It is used in various other classes to read files
+ * for agencies and store information in multiple Tutor objects.
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
+
 public class Tutor {
     String tutorName;
     String agencyName;

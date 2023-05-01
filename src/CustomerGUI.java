@@ -8,6 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Vector;
+/**
+ * CustomerGUI
+ *
+ * This class runs the interface on the customer side. You can access any store, see
+ * the data of the store, make a booking, search using a keyword,
+ * and access other Customer interfaces as well.
+ *
+ * @author Dhruv Wadhwa, Lab 25
+ *
+ * @version 5/1/2023
+ *
+ */
 
 
 public class CustomerGUI extends JComponent implements Runnable {
@@ -22,7 +34,10 @@ public class CustomerGUI extends JComponent implements Runnable {
     String user;
     String agencyName;
     JFrame f;
-
+    /**
+     * waits for a button to be pressed and then executes apporiate steps
+     * @param e1 the event to be processed
+     */
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -117,7 +132,10 @@ public class CustomerGUI extends JComponent implements Runnable {
     public CustomerGUI(String user){
         this.user = user;
     }
-
+    /**
+     * runs the Customer GUI
+     *
+     */
     public void run() {
         try {
             createFile(user);
@@ -175,7 +193,11 @@ public class CustomerGUI extends JComponent implements Runnable {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Adds data to the tables
+     * @param in
+     * @param headers
+     */
     public synchronized static DefaultTableModel createTableModel(Reader in,
                                                      Vector<Object> headers) {
         DefaultTableModel model = null;
@@ -204,7 +226,10 @@ public class CustomerGUI extends JComponent implements Runnable {
         }
 
     }
-
+    /**
+     * reads files
+     *
+     */
     public synchronized ArrayList<Tutor> readFile() {
         ArrayList<Tutor> tutors = new ArrayList<>();
         String tutorName;
@@ -239,6 +264,10 @@ public class CustomerGUI extends JComponent implements Runnable {
         return tutors;
     }
 
+    /**
+     * writes to the files
+     * @param tutors arraylist of tutor objects
+     */
     public synchronized void writeFile(ArrayList<Tutor> tutors) {
         File file = new File(fileName);
         String infoLine;
@@ -258,6 +287,9 @@ public class CustomerGUI extends JComponent implements Runnable {
         }
     }
 
+    /**
+     * updates data in table
+     */
     public synchronized void updateTable() {
         try {
             Vector<Object> headers = new Vector<Object>();
@@ -276,6 +308,10 @@ public class CustomerGUI extends JComponent implements Runnable {
 
     }
 
+    /**
+     * creates file for customer if already not existing
+     * @param user username string
+     */
     public void createFile(String user) {
         File dir = new File("./src/");
         String fileName = "Customer_" + user;
@@ -294,7 +330,10 @@ public class CustomerGUI extends JComponent implements Runnable {
             flag = false;
         }
     }
-
+    /**
+     * writes the transaction or booking into the customer file
+     * @param customer which is being added to the file
+     */
     public synchronized void writeBooking(Customer customer){
         String fileName = "Customer_" + user;
         String directory = "./src/"; //Directory path must be here
