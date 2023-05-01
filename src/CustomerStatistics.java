@@ -17,12 +17,13 @@ public class CustomerStatistics extends JComponent implements Runnable {
     JButton decreasingSort;
     JTextArea area;
     private static String user;
+    JFrame f;
 
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
             if (e1.getSource() == exit) {
-
+                f.dispose();
             }
             if (e1.getSource() == increasingSort) {
                 area.setText(getStatisticsIncreasing(user));
@@ -42,7 +43,7 @@ public class CustomerStatistics extends JComponent implements Runnable {
         SwingUtilities.invokeLater(new  CustomerStatistics(user));
     }
     public void run() {
-        JFrame f = new JFrame();
+        f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         area = new JTextArea();
         area.setText(getStatistics(user));

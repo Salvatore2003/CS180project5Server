@@ -14,12 +14,14 @@ public class CustomerGUI extends JComponent implements Runnable {
     JButton bookTutor;
     JButton purchaseHistory;
     JButton statistics;
+    JButton search;
     JButton exit;
     String fileName;
     ArrayList<Tutor> tutors;
     DefaultTableModel m;
-    private static String user;
+    String user;
     String agencyName;
+    JFrame f;
 
     ActionListener actionListener = new ActionListener() {
         @Override
@@ -66,6 +68,7 @@ public class CustomerGUI extends JComponent implements Runnable {
                     writeBooking(customer);
                     updateTable();
                     m.fireTableDataChanged();
+                    f.repaint();
                     JOptionPane.showMessageDialog(null, "Booking has been Made", "Booking Form", JOptionPane.PLAIN_MESSAGE);
 
 
@@ -78,21 +81,43 @@ public class CustomerGUI extends JComponent implements Runnable {
                 customerPurchaseHistoryGui.run();
             }
             if (e1.getSource() == statistics) {
-
+                CustomerStatistics customerStatistics = new CustomerStatistics(user);
+                customerStatistics.run();
             }
             if (e1.getSource() == exit) {
+                f.dispose();
+            }
+            if (e1.getSource() == search) {
+                String text = "";
+                String searchWord = JOptionPane.showInputDialog(null, "Enter a keyword to search through tutor names or their about me", "Search Form",
+                        JOptionPane.QUESTION_MESSAGE);
+                tutors = readFile();
+                ArrayList<Tutor> searchTutors = new ArrayList<>();
+                for(int i = 0; i < tutors.size(); i++) {
+                    if(tutors.get(i).getTutorName().contains(searchWord) || tutors.get(i).getAboutMe().contains(searchWord)){
+                        searchTutors.add(tutors.get(i));
+                    }
+                }
 
+                for(int i = 0; i < searchTutors.size(); i++) {
+                    text += searchTutors.get(i).getTutorName() + "\n";
+                }
+
+                if(searchTutors.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Did not find a search to match your keyword", "Search Form",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Search found tutors:\n" + text, "Search Form",
+                            JOptionPane.PLAIN_MESSAGE);
+                }
             }
         }
     };
 
-    public CustomerGUI(String User){
+    public CustomerGUI(String user){
         this.user = user;
     }
-    public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(new CustomerGUI(user));
-    }
     public void run() {
         try {
             createFile(user);
@@ -121,7 +146,7 @@ public class CustomerGUI extends JComponent implements Runnable {
             m = createTableModel(fin, headers);
 
 
-            JFrame f = new JFrame();
+            f = new JFrame();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.getContentPane().add(new JScrollPane(new JTable(m)));
             f.setTitle("Customer Interface");
@@ -140,6 +165,9 @@ public class CustomerGUI extends JComponent implements Runnable {
             exit = new JButton("Exit");
             exit.addActionListener(actionListener);
             panel.add(exit);
+            search = new JButton("Search");
+            search.addActionListener(actionListener);
+            panel.add(search);
 
             f.setVisible(true);
 
@@ -256,9 +284,9 @@ public class CustomerGUI extends JComponent implements Runnable {
         try {
             flag = file.createNewFile();
             if (flag) {
-                JOptionPane.showMessageDialog(null, "Welcome Back", "Create Form", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Welcome Customer", "Create Form", JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Welcome New Customer", "Create Form", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Welcome Back", "Create Form", JOptionPane.PLAIN_MESSAGE);
                 flag = false;
             }
         } catch (IOException e) {

@@ -6,8 +6,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
+public class SellerStatisticsGUI extends JComponent implements Runnable {
     JButton exit;
     String user;
     JFrame f;
@@ -22,17 +23,17 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
     };
 
 
-    public SellerPurchaseHistoryGUI(String user) {
+    public SellerStatisticsGUI(String user) {
         this.user = user;
     }
 
-    public void run() {
+   public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JTextArea area = new JTextArea();
         String[] storeNames = getStoreNames(user);
-        area.setText(getPurchaseHistory(storeNames));
-        f.setTitle("Purchase History");
+        area.setText(getStatisitcs(storeNames));
+        f.setTitle("Statistics");
         f.setSize(300, 300);
         JPanel panel = new JPanel();
         f.add(panel, BorderLayout.SOUTH);
@@ -45,17 +46,20 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
         f.setVisible(true);
     }
 
-    public String getPurchaseHistory(String[] storeNames) {
-        String customerName;
-        String agencyName;
-        String tutorName;
-        int hoursBooked;
+    public String getStatisitcs(String[] storeNames) {
+        String customerName = "";
+        ArrayList<SellerStatistics> sellerStatisticsArrayList = new ArrayList<>();
+        int[] count2Array = new int[storeNames.length];
         String[] split;
         String fileName;
         String directory = "./src/"; //Directory path must be here
         File dir = new File(directory);
         File[] files = dir.listFiles();
         String text = "";
+        int count = 0;
+        int count2 = 0;
+        int count3 = 0;
+        int l = 0;
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].getName().contains("Customer_")) {
@@ -66,28 +70,41 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
                             FileReader fr = new FileReader(input);
                             BufferedReader bfr = new BufferedReader(fr);
                             String infoLine = bfr.readLine();
+                            count = 0;
                             while (infoLine != null) {
                                 split = infoLine.split(",", 5);
                                 if(split[1].equals(storeNames[j])){
                                     customerName = split[0];
-                                    agencyName = split[1];
-                                    tutorName = split[2];
-                                    hoursBooked = Integer.parseInt(split[3]);
-                                    text = text + String.format("Customer: %s\nBooked Tutor: %s\nAgency: %s\nHours Booked: %d\n",customerName, tutorName,agencyName,hoursBooked);
+                                    count++;
+                                    count2++;
+                                    count3++;
+                                    System.out.println(count2);
                                 }
                                 infoLine = bfr.readLine();
                             }
-
+                            if(count > 0) {
+                                SellerStatistics sellerStatistics = new SellerStatistics(storeNames[j],customerName,count);
+                                sellerStatisticsArrayList.add(sellerStatistics);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        count2Array[j] = count2Array[j] + count;
                     }
 
                 }
+
             }
         }
-
-
+        text += "Total Transactions: " + count3 + "\n";
+        for(int k = 0; k< storeNames.length; k++) {
+            text += "         Store transactions " + storeNames[k] + ": " + count2Array[k] + "\n";
+            for (int i = 0; i < sellerStatisticsArrayList.size(); i++) {
+                if (sellerStatisticsArrayList.get(i).getAgencyName().equals(storeNames[k]))
+                    text += "              Customer Transactions " + sellerStatisticsArrayList.get(i).getCustomerName() +
+                            ": " + sellerStatisticsArrayList.get(i).getTransactionCount() + "\n";
+            }
+        }
         return text;
     }
 
