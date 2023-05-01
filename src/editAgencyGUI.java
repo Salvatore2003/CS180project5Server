@@ -201,7 +201,8 @@ public class editAgencyGUI extends JComponent implements Runnable {
                 infoLine = bfr.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
         return tutors;
     }
@@ -228,7 +229,8 @@ public class editAgencyGUI extends JComponent implements Runnable {
             }
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -242,18 +244,25 @@ public class editAgencyGUI extends JComponent implements Runnable {
         int hoursAvailable;
         double hourlyRate;
         int hoursPromised;
+        Tutor tutor = null;
+        try {
+            tutorName = JOptionPane.showInputDialog(null, "What is the name of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE);
+            aboutMe = JOptionPane.showInputDialog(null, "Write the aboutMe for the Tutor", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE);
+            hoursAvailable = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours available of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE));
+            hourlyRate = Double.parseDouble(JOptionPane.showInputDialog(null, "What is the hourly rate of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE));
+            hoursPromised = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours promised of the Tutor?", "Info Form",
+                    JOptionPane.QUESTION_MESSAGE));
+            tutor = new Tutor(tutorName, agencyName, aboutMe, hoursAvailable, hourlyRate, hoursPromised);
 
-        tutorName = JOptionPane.showInputDialog(null, "What is the name of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE);
-        aboutMe = JOptionPane.showInputDialog(null, "Write the aboutMe for the Tutor", "Info Form",
-                JOptionPane.QUESTION_MESSAGE);
-        hoursAvailable = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours available of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE));
-        hourlyRate = Double.parseDouble(JOptionPane.showInputDialog(null, "What is the hourly rate of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE));
-        hoursPromised = Integer.parseInt(JOptionPane.showInputDialog(null, "What are the hours promised of the Tutor?", "Info Form",
-                JOptionPane.QUESTION_MESSAGE));
-        Tutor tutor = new Tutor(tutorName, agencyName, aboutMe, hoursAvailable, hourlyRate, hoursPromised);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
         return tutor;
     }
     /**
@@ -303,8 +312,14 @@ public class editAgencyGUI extends JComponent implements Runnable {
                     infoLine = bfr.readLine();
                 }
             } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                        JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
         return tutors;

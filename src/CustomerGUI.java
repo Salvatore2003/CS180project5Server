@@ -88,6 +88,9 @@ public class CustomerGUI extends JComponent implements Runnable {
 
                 } catch (InvalidTutor e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Error Form", JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
             if (e1.getSource() == purchaseHistory) {
