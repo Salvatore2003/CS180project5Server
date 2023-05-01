@@ -145,6 +145,7 @@ public class UserSettingGUI extends JComponent implements Runnable{
                 userConfirmation = JOptionPane.showConfirmDialog(null, "Are you sure you" +
                         " want to delete your account?", "Delete Account", JOptionPane.YES_NO_OPTION);
                 if (userConfirmation == 0) {
+                    deleteUsersMethod(user.getUserName());
                     changeUserInfo("delete account", "none");
                     frame.dispose();
                     LogInGUI.runLogInGUI(socket, bfr, writer, objectInputStream, objectOutputStream);
@@ -238,6 +239,26 @@ public class UserSettingGUI extends JComponent implements Runnable{
             objectOutputStream.reset();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public void deleteUsersMethod(String user) {
+        String directory = "./src/"; //Directory path must be here
+        File dir = new File(directory);
+        File[] files = dir.listFiles();
+        boolean flag;
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].getName().contains(user)) {
+                    flag = files[i].delete();
+                    if (!flag) {
+                        JOptionPane.showMessageDialog(null, "Error in deleting", "Delete Form", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "User files not found", "Delete Form", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 }
