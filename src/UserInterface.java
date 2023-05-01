@@ -40,7 +40,6 @@ public class UserInterface extends JComponent implements Runnable{
                     System.out.println(user.getUserName());
                     CustomerGUI customerGUI = new CustomerGUI(user.getUserName());
                     customerGUI.run();
-
                 }
                 if (user.isSeller()) {
                     SellerGUI sellerGUI = new SellerGUI(user.getUserName());

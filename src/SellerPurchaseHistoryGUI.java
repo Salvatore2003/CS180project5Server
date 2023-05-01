@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
     JButton exit;
-    private static String user;
+    String user;
     JFrame f;
 
     ActionListener actionListener = new ActionListener() {
@@ -26,9 +26,6 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
         this.user = user;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new SellerPurchaseHistoryGUI(user));
-    }
     public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

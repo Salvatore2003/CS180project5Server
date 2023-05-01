@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class SellerStatisticsGUI extends JComponent implements Runnable {
     JButton exit;
-    private static String user;
+    String user;
     JFrame f;
 
     ActionListener actionListener = new ActionListener() {
@@ -27,10 +27,7 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
         this.user = user;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new SellerStatisticsGUI(user));
-    }
-    public void run() {
+   public void run() {
         f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JTextArea area = new JTextArea();
