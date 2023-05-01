@@ -13,7 +13,6 @@ public class editAgencyGUI extends JComponent implements Runnable {
     private static String agencyName;
     JPanel panel;
     JFrame frame;
-
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
@@ -113,30 +112,43 @@ public class editAgencyGUI extends JComponent implements Runnable {
     }
 
     public void run() {
-        panel = new JPanel();
-        panel.setLayout(null);
-        frame = new JFrame();
-        frame.setTitle("Edit Agency Interface");
-        frame.setLocation(new Point(500, 300));
-        frame.add(panel);
-        frame.setSize(new Dimension(350, 320));
-        addButton = new JButton("Add new Tutors to Agency");
-        addButton.setBounds(20, 50, 300, 30);
-        addButton.addActionListener(actionListener);
-        panel.add(addButton);
-        editButton = new JButton("Edit Information about a Tutor");
-        editButton.setBounds(20, 110, 300, 30);
-        editButton.addActionListener(actionListener);
-        panel.add(editButton);
-        deleteButton = new JButton("Delete information of a Tutor");
-        deleteButton.setBounds(20, 170, 300, 30);
-        deleteButton.addActionListener(actionListener);
-        panel.add(deleteButton);
-        exitButton = new JButton("Exit Interface");
-        exitButton.setBounds(20, 230, 300, 30);
-        exitButton.addActionListener(actionListener);
-        panel.add(exitButton);
-        frame.setVisible(true);
+        try {
+            String fileName = user + "_" + agencyName;
+
+
+            String directory = "./src/"; //Directory path must be here
+            File dir = new File(directory);
+            File input = new File(dir, fileName);
+            if (!input.exists()) {
+                throw new InvalidAgencyName("Incorrect Agency Name");
+            }
+            panel = new JPanel();
+            panel.setLayout(null);
+            frame = new JFrame();
+            frame.setTitle("Edit Agency Interface");
+            frame.setLocation(new Point(500, 300));
+            frame.add(panel);
+            frame.setSize(new Dimension(350, 320));
+            addButton = new JButton("Add new Tutors to Agency");
+            addButton.setBounds(20, 50, 300, 30);
+            addButton.addActionListener(actionListener);
+            panel.add(addButton);
+            editButton = new JButton("Edit Information about a Tutor");
+            editButton.setBounds(20, 110, 300, 30);
+            editButton.addActionListener(actionListener);
+            panel.add(editButton);
+            deleteButton = new JButton("Delete information of a Tutor");
+            deleteButton.setBounds(20, 170, 300, 30);
+            deleteButton.addActionListener(actionListener);
+            panel.add(deleteButton);
+            exitButton = new JButton("Exit Interface");
+            exitButton.setBounds(20, 230, 300, 30);
+            exitButton.addActionListener(actionListener);
+            panel.add(exitButton);
+            frame.setVisible(true);
+        } catch (InvalidAgencyName e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), e.getMessage(), JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public synchronized ArrayList<Tutor> readFile() {
@@ -260,7 +272,6 @@ public class editAgencyGUI extends JComponent implements Runnable {
                     infoLine = bfr.readLine();
                 }
             } catch (FileNotFoundException e) {
-                System.out.println("lol");
             } catch (IOException e) {
                 e.printStackTrace();
             }

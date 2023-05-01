@@ -1,2 +1,3 @@
 purdue1 boilerup! purdue@purdue.edu false true
 blamarca tomoon bslamarca@gmail.com true false
+user2 password2 user@purdue.@gmail.com true false
