@@ -12,13 +12,13 @@ import java.util.ArrayList;
  */
 
 public class Server {
-    static ArrayList <User> users;
     final static Object obj = new Object();
+    static ArrayList<User> users;
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(4242);
         serverSocket.setReuseAddress(true);
-        if (users == null || users.size() == 0){
+        if (users == null || users.size() == 0) {
             users = ServerFileManager.recoverUsers();
         }
 
@@ -29,89 +29,14 @@ public class Server {
         }
     }
 
-
-
-    private static class ClientHandler implements Runnable {
-        private final Socket serverSocket;
-
-        private ClientHandler(Socket serverSocket) {
-
-            this.serverSocket = serverSocket;
-        }
-
-        /**
-         * makes a new thread to run multiple clients
-         */
-        @Override
-        public void run() {
-            try {
-                boolean runThread = true;
-
-                String action; //the action the user enters
-                BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream())); //the
-                //buffered reader
-                PrintWriter writer = new PrintWriter(serverSocket.getOutputStream()); //the writer
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream()); // the
-                //object output stream to output objects
-                ObjectInputStream objectInputStream = new ObjectInputStream(serverSocket.getInputStream()); //receives
-                //objects from the client
-                do {
-                    action = reader.readLine();
-                    if (action.contains("New User")) {
-                        synchronized (obj) {
-                            try {
-                                User newUser = makeAccount(reader);
-
-                                if (newUser != null) {
-                                    users.add(newUser);
-                                    writer.write("account created");
-                                    writer.println();
-                                    writer.flush();
-                                    ServerFileManager.storeUserData(users);
-                                } else {
-                                    writer.write("error occur");
-                                    writer.println();
-                                    writer.flush();
-                                }
-                            } catch (UsernameExistError e) {
-                                writer.write("username exist error");
-                                writer.println();
-                                writer.flush();
-                            } catch (Exception e) {
-                                writer.write("error");
-                                writer.println();
-                                writer.flush();
-                            }
-                        }
-                    }
-                    if (action.contains("Logging in")) {
-                        synchronized (obj) {
-                            logInAttempt(reader, writer, objectOutputStream);
-                        }
-                    }
-                    if (action.contains("check for existing usernames")) {
-                        checkNewUsername(reader, writer);
-                    }
-                    if (action.contains("changing user info")) {
-                        changeUserInfo(reader, writer, objectInputStream);
-                    }
-                } while (runThread);
-                writer.close();
-                reader.close();
-                serverSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     /**
      * makes a new account for the user
+     *
      * @param reader the reader that reads the info
      * @return the user that is made
      * @throws UsernameExistError if the username already exist an error is thrown
      */
-    public static User makeAccount(BufferedReader reader) throws UsernameExistError{
+    public synchronized static User makeAccount(BufferedReader reader) throws UsernameExistError {
         try {
             String line; //the line that is read from the client
             String userName; //the username
@@ -142,11 +67,12 @@ public class Server {
 
     /**
      * checks if there is already an existing username
+     *
      * @param userName the potential username
      * @return true if it is a new username false if not
      */
-    public static boolean checkForExistingUsername(String userName) {
-        if (users!= null) {
+    public synchronized static boolean checkForExistingUsername(String userName) {
+        if (users != null) {
             for (int i = 0; i < users.size(); i++) {
                 if (users.get(i).getUserName().equals(userName)) {
                     return false;
@@ -158,11 +84,12 @@ public class Server {
 
     /**
      * the attempted log in that the user has
-     * @param bfr the buffer reader that reads from the client
-     * @param writer the writer that writes to the client
+     *
+     * @param bfr                the buffer reader that reads from the client
+     * @param writer             the writer that writes to the client
      * @param objectOutputStream the object output stream that the program uses
      */
-    public static void logInAttempt(BufferedReader bfr, PrintWriter writer, ObjectOutputStream objectOutputStream) {
+    public synchronized static void logInAttempt(BufferedReader bfr, PrintWriter writer, ObjectOutputStream objectOutputStream) {
         String userNameAttempt; //the attempted username that is entered
         String passwordAttempt; //the attempted password that is entered
         int indexOfUser = 0; //the index that the user is located in users
@@ -180,7 +107,7 @@ public class Server {
                 }
             }
             if (userNameExist) {
-                if(users.get(indexOfUser).getPassword().equals(passwordAttempt)) {
+                if (users.get(indexOfUser).getPassword().equals(passwordAttempt)) {
                     logInSuccess = true;
                 }
             }
@@ -204,10 +131,11 @@ public class Server {
 
     /**
      * checks to see if the new username already exist
-     * @param bfr reads from the client
+     *
+     * @param bfr    reads from the client
      * @param writer writes to the client
      */
-    public static void checkNewUsername(BufferedReader bfr, PrintWriter writer) {
+    public synchronized static void checkNewUsername(BufferedReader bfr, PrintWriter writer) {
         try {
             String newUsername = bfr.readLine(); //the new username that is entered
             if (checkForExistingUsername(newUsername)) {
@@ -227,11 +155,12 @@ public class Server {
 
     /**
      * changes the userinfo
-     * @param bfr reads from the client
-     * @param writer writes to the client
+     *
+     * @param bfr               reads from the client
+     * @param writer            writes to the client
      * @param objectInputStream reads object from the client
      */
-    public static void changeUserInfo(BufferedReader bfr, PrintWriter writer, ObjectInputStream objectInputStream) {
+    public synchronized static void changeUserInfo(BufferedReader bfr, PrintWriter writer, ObjectInputStream objectInputStream) {
         String infoChange = ""; //info being changed
         User user; //the user that is being changed
         int indexOfUser = -1; //the location that user is in array list users
@@ -247,13 +176,13 @@ public class Server {
                     break;
                 }
             }
-            if (infoChange.equals("username")) {
+            if (infoChange.contains("username")) {
                 users.get(indexOfUser).setUserName(newUserInfo);
-            } else if (infoChange.equals("password")) {
+            } else if (infoChange.contains("password")) {
                 users.get(indexOfUser).setPassword(newUserInfo);
-            } else if (infoChange.equals("email")) {
+            } else if (infoChange.contains("email")) {
                 users.get(indexOfUser).setUserEmail(newUserInfo);
-            } else if (infoChange.equals("role")) {
+            } else if (infoChange.contains("role")) {
                 if (users.get(indexOfUser).isBuyer()) {
                     users.get(indexOfUser).setSeller(true);
                     users.get(indexOfUser).setBuyer(false);
@@ -262,7 +191,7 @@ public class Server {
                     users.get(indexOfUser).setSeller(false);
                 }
             }
-            if (infoChange.equals("delete account")) {
+            if (infoChange.contains("delete account")) {
                 users.remove(indexOfUser);
             }
             ServerFileManager.storeUserData(users);
@@ -272,6 +201,82 @@ public class Server {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static class ClientHandler implements Runnable {
+        private final Socket serverSocket;
+
+        private ClientHandler(Socket serverSocket) {
+
+            this.serverSocket = serverSocket;
+        }
+
+        /**
+         * makes a new thread to run multiple clients
+         */
+        @Override
+        public void run() {
+            try {
+                boolean runThread = true;
+
+                String action; //the action the user enters
+                BufferedReader reader = new BufferedReader(new InputStreamReader(serverSocket.getInputStream())); //the
+                //buffered reader
+                PrintWriter writer = new PrintWriter(serverSocket.getOutputStream()); //the writer
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream()); // the
+                //object output stream to output objects
+                ObjectInputStream objectInputStream = new ObjectInputStream(serverSocket.getInputStream()); //receives
+                //objects from the client
+                do {
+                    action = reader.readLine();
+                    synchronized (obj) {
+                        if (action.contains("New User")) {
+                            synchronized (obj) {
+                                try {
+                                    User newUser = makeAccount(reader);
+
+                                    if (newUser != null) {
+                                        users.add(newUser);
+                                        writer.write("account created");
+                                        writer.println();
+                                        writer.flush();
+                                        ServerFileManager.storeUserData(users);
+                                    } else {
+                                        writer.write("error occur");
+                                        writer.println();
+                                        writer.flush();
+                                    }
+                                } catch (UsernameExistError e) {
+                                    writer.write("username exist error");
+                                    writer.println();
+                                    writer.flush();
+                                } catch (Exception e) {
+                                    writer.write("error");
+                                    writer.println();
+                                    writer.flush();
+                                }
+                            }
+                        }
+                        if (action.contains("Logging in")) {
+                            synchronized (obj) {
+                                logInAttempt(reader, writer, objectOutputStream);
+                            }
+                        }
+                        if (action.contains("check for existing usernames")) {
+                            checkNewUsername(reader, writer);
+                        }
+                        if (action.contains("changing user info")) {
+                            changeUserInfo(reader, writer, objectInputStream);
+                        }
+                    }
+                } while (runThread);
+                writer.close();
+                reader.close();
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

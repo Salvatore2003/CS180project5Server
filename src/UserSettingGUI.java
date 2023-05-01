@@ -27,9 +27,11 @@ public class UserSettingGUI extends JComponent implements Runnable{
     BufferedReader bfr;
     ObjectInputStream objectInputStream;
     ObjectOutputStream objectOutputStream;
+    final static Object obj = new Object();
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+
             if (e.getSource() == editUsername){
                 String newUsername;
                 String errors = "";
