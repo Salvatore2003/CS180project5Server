@@ -189,7 +189,8 @@ public class CustomerGUI extends JComponent implements Runnable {
             f.setVisible(true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
     /**
@@ -258,7 +259,8 @@ public class CustomerGUI extends JComponent implements Runnable {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
         return tutors;
     }
@@ -282,7 +284,8 @@ public class CustomerGUI extends JComponent implements Runnable {
             }
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -302,7 +305,8 @@ public class CustomerGUI extends JComponent implements Runnable {
             m = createTableModel(fin, headers);
             m.fireTableDataChanged();
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -348,7 +352,8 @@ public class CustomerGUI extends JComponent implements Runnable {
 
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

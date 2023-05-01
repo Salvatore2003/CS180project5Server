@@ -98,7 +98,8 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
                             }
 
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                     }
 

@@ -107,7 +107,8 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
                                 sellerStatisticsArrayList.add(sellerStatistics);
                             }
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error. Please try again", "Error Form",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                         count2Array[j] = count2Array[j] + count;
                     }
