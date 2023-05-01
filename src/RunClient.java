@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 /**
  * runClient
@@ -10,7 +9,7 @@ import java.net.Socket;
  * @author Bryce LaMarca, Lab 25
  * @version 4/20/2023
  */
-public class runClient {
+public class RunClient {
     /**
      * connects to the server and takes the client to the LOG in GUI
      */
