@@ -14,7 +14,7 @@ public class SellerGUI extends JComponent implements Runnable {
     JButton purchaseHistory;
     JButton statistics;
     JFrame frame;
-    private static String user = "blamarca3";
+    String user;
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -57,11 +57,6 @@ public class SellerGUI extends JComponent implements Runnable {
 
     public SellerGUI(String user) {
         this.user = user;
-    }
-
-    public static void main(String[] args) {
-
-        SwingUtilities.invokeLater(new SellerGUI(user));
     }
 
     public void run() {

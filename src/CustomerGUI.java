@@ -19,7 +19,7 @@ public class CustomerGUI extends JComponent implements Runnable {
     String fileName;
     ArrayList<Tutor> tutors;
     DefaultTableModel m;
-    private static String user;
+    String user;
     String agencyName;
     JFrame f;
 
@@ -114,13 +114,10 @@ public class CustomerGUI extends JComponent implements Runnable {
         }
     };
 
-    public CustomerGUI(String User){
+    public CustomerGUI(String user){
         this.user = user;
     }
-    public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(new CustomerGUI(user));
-    }
     public void run() {
         try {
             createFile(user);
