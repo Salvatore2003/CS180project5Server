@@ -93,7 +93,6 @@ public class CustomerGUI extends JComponent implements Runnable {
                 for(int i = 0; i < tutors.size(); i++) {
                     if(tutors.get(i).getTutorName().contains(searchWord) || tutors.get(i).getAboutMe().contains(searchWord)){
                         searchTutors.add(tutors.get(i));
-                        System.out.println("Hi");
                     }
                 }
 
@@ -285,9 +284,9 @@ public class CustomerGUI extends JComponent implements Runnable {
         try {
             flag = file.createNewFile();
             if (flag) {
-                JOptionPane.showMessageDialog(null, "Welcome Back", "Create Form", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Welcome Customer", "Create Form", JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Welcome New Customer", "Create Form", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Welcome Back", "Create Form", JOptionPane.PLAIN_MESSAGE);
                 flag = false;
             }
         } catch (IOException e) {
