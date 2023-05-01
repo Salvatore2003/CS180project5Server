@@ -90,7 +90,6 @@ public class CustomerPurchaseHistoryGui extends JComponent implements Runnable {
                 hoursBooked = Integer.parseInt(split[3]);
                 text = text + String.format("Booked Tutor: %s\nAgency: %s\nHours Booked: %d\n", tutorName,agencyName,hoursBooked);
                 i++;
-                System.out.println(text);
                 infoLine = bfr.readLine();
             }
         } catch (IOException e) {

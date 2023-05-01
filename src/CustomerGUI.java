@@ -49,7 +49,6 @@ public class CustomerGUI extends JComponent implements Runnable {
                     boolean flag = true;
                     Tutor tutor = null;
                     for (int i = 0; i < tutors.size(); i++) {
-                        System.out.print(tutors.get(i).getTutorName());
                         if (tutors.get(i).getTutorName().equals(tutorName1)) {
                             flag = false;
                             tutor = tutors.get(i);

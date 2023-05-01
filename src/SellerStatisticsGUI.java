@@ -98,7 +98,7 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
                                     count++;
                                     count2++;
                                     count3++;
-                                    System.out.println(count2);
+
                                 }
                                 infoLine = bfr.readLine();
                             }
@@ -154,7 +154,8 @@ public class SellerStatisticsGUI extends JComponent implements Runnable {
                 }
             }
         } else {
-            System.out.println("No such files found in directory.");
+            JOptionPane.showMessageDialog(null,"No such files found in directory." , "Info Form", JOptionPane.ERROR_MESSAGE);
+
         }
         return storeNames;
     }
