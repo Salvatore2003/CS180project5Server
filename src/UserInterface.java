@@ -37,14 +37,13 @@ public class UserInterface extends JComponent implements Runnable{
             }
             if (e.getSource() == stores) {
                 if (user.isBuyer()) {
-                    System.out.println("execute seller");
+                    CustomerGUI customerGUI = new CustomerGUI(user.getUserName());
+                    customerGUI.run();
 
-                    SellerGUI sellerGUI = new SellerGUI(user.getUserName());
-                    frame.dispose();
-                    sellerGUI.run();
                 }
                 if (user.isSeller()) {
-
+                    SellerGUI sellerGUI = new SellerGUI(user.getUserName());
+                    sellerGUI.run();
                 }
             }
             if (e.getSource() == messages) {

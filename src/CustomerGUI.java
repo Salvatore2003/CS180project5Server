@@ -68,6 +68,7 @@ public class CustomerGUI extends JComponent implements Runnable {
                     writeBooking(customer);
                     updateTable();
                     m.fireTableDataChanged();
+                    f.repaint();
                     JOptionPane.showMessageDialog(null, "Booking has been Made", "Booking Form", JOptionPane.PLAIN_MESSAGE);
 
 
