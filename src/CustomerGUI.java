@@ -21,6 +21,7 @@ public class CustomerGUI extends JComponent implements Runnable {
     DefaultTableModel m;
     private static String user;
     String agencyName;
+    JFrame f;
 
     ActionListener actionListener = new ActionListener() {
         @Override
@@ -79,10 +80,11 @@ public class CustomerGUI extends JComponent implements Runnable {
                 customerPurchaseHistoryGui.run();
             }
             if (e1.getSource() == statistics) {
-
+                CustomerStatistics customerStatistics = new CustomerStatistics(user);
+                customerStatistics.run();
             }
             if (e1.getSource() == exit) {
-
+                f.dispose();
             }
             if (e1.getSource() == search) {
                 String text = "";
@@ -146,7 +148,7 @@ public class CustomerGUI extends JComponent implements Runnable {
             m = createTableModel(fin, headers);
 
 
-            JFrame f = new JFrame();
+            f = new JFrame();
             f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             f.getContentPane().add(new JScrollPane(new JTable(m)));
             f.setTitle("Customer Interface");

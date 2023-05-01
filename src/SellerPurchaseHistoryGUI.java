@@ -10,12 +10,13 @@ import java.io.IOException;
 public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
     JButton exit;
     private static String user;
+    JFrame f;
 
     ActionListener actionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e1) {
             if (e1.getSource() == exit) {
-
+                f.dispose();
             }
         }
     };
@@ -29,7 +30,7 @@ public class SellerPurchaseHistoryGUI extends JComponent implements Runnable {
         SwingUtilities.invokeLater(new SellerPurchaseHistoryGUI(user));
     }
     public void run() {
-        JFrame f = new JFrame();
+        f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JTextArea area = new JTextArea();
         String[] storeNames = getStoreNames(user);

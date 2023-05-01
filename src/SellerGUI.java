@@ -13,6 +13,7 @@ public class SellerGUI extends JComponent implements Runnable {
     JButton exitButton;
     JButton purchaseHistory;
     JButton statistics;
+    JFrame frame;
     private static String user = "blamarca3";
     ActionListener actionListener = new ActionListener() {
         @Override
@@ -45,10 +46,11 @@ public class SellerGUI extends JComponent implements Runnable {
                 sellerPurchaseHistoryGUI.run();
             }
             if (e.getSource() == statistics) {
-
+                SellerStatisticsGUI sellerStatisticsGUI = new SellerStatisticsGUI(user);
+                sellerStatisticsGUI.run();
             }
             if (e.getSource() == exitButton) {
-
+                frame.dispose();
             }
         }
     };
@@ -65,7 +67,7 @@ public class SellerGUI extends JComponent implements Runnable {
     public void run() {
         JPanel panel = new JPanel();
         panel.setLayout(null);
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setTitle("Seller Interface");
         frame.setLocation(new Point(500, 200));
         frame.add(panel);
@@ -82,7 +84,6 @@ public class SellerGUI extends JComponent implements Runnable {
         deleteButton.setBounds(20, 170, 300, 30);
         deleteButton.addActionListener(actionListener);
         panel.add(deleteButton);
-
         purchaseHistory = new JButton("Purchase History");
         purchaseHistory.setBounds(20, 230, 300, 30);
         purchaseHistory.addActionListener(actionListener);
